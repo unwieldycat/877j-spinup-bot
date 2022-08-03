@@ -1,6 +1,7 @@
 #include "main.hpp"
 #include "devices.hpp"
 #include "gui.hpp"
+#include "manual.hpp"
 
 // ============================= Initalization ============================= //
 
@@ -14,4 +15,4 @@ void disabled() {}
 
 void autonomous() {}
 
-void opcontrol() {}
+void opcontrol() { pros::Task drive_task(drive_control); }
