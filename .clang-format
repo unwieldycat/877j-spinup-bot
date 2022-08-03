@@ -1,8 +1,5 @@
----
 Language: Cpp
-Standard: Cpp17
 UseTab: ForIndentation
 TabWidth: 4
 IndentWidth: 4
 UseCRLF: false
----
