@@ -15,4 +15,4 @@ void disabled() {}
 
 void autonomous() {}
 
-void opcontrol() { pros::Task drive_task(drive_control); }
+void opcontrol() { pros::Task drive_task(manual::drive_control); }

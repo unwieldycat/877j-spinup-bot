@@ -2,7 +2,7 @@
 
 // ======================== Manual Control Functions ======================== //
 
-void drive_control() {
+void manual::drive_control() {
 	// Variable to record robot state
 	bool active = false;
 	while (true) {
