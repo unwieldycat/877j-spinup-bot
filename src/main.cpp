@@ -5,7 +5,7 @@
 
 // ============================= Initalization ============================= //
 
-void initialize() {}
+void initialize() { gui::init(); }
 
 void competition_initialize() {}
 
