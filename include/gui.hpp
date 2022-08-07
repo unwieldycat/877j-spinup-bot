@@ -1,5 +1,6 @@
 #pragma once
 
+#include "auton.hpp"
 #include "main.hpp"
 
 // ============================ GUI Definitions ============================ //
@@ -7,23 +8,20 @@
 namespace gui {
 
 /**
- * Initialize GUI and show startup screen
+ * Initialize GUI and load screen elements
  */
 void init();
 
 /**
- * Show autonomous selection prompt
+ * Show autonomous selection UI
+ *
+ * Returns auton selected by user
  */
-int selection();
+auton::Routine selection();
 
 /**
- * Show autonomous status screen
+ * Show game UI
  */
-void auton();
-
-/**
- * Show operator control status screen
- */
-void opcontrol();
+void game();
 
 } // namespace gui
