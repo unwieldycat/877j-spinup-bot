@@ -1,8 +1,10 @@
 #include "manual.hpp"
 
+using namespace manual;
+
 // ======================== Manual Control Functions ======================== //
 
-void manual::drive_control() {
+void drive_control() {
 	// Variable to record robot state
 	bool active = false;
 	while (true) {

@@ -1,5 +1,7 @@
 #include "gui.hpp"
 
+using namespace gui;
+
 // ====================== Filesystem Driver Functions ====================== //
 
 // Credit to jpearman on VEXFourm for the filesystem driver functions
@@ -57,7 +59,7 @@ static lv_fs_res_t fs_tell(void *file_p, uint32_t *pos_p) {
 
 // ================================ Methods ================================ //
 
-void gui::init() {
+void init() {
 	// Create and configure filesystem driver
 	lv_fs_drv_t fs_driver;
 	memset(&fs_driver, 0, sizeof(lv_fs_drv_t));
