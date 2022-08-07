@@ -3,6 +3,7 @@
 // Libraries
 #include "api.h"
 #include "okapi/api.hpp"
+#include <functional>
 #include <iostream>
 
 using namespace okapi::literals;
