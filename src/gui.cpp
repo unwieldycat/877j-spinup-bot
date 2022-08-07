@@ -1,4 +1,5 @@
 #include "gui.hpp"
+#include "devices.hpp"
 
 // ====================== Filesystem Driver Functions ====================== //
 
@@ -53,6 +54,20 @@ static lv_fs_res_t fs_tell(void *file_p, uint32_t *pos_p) {
 	FILE **fp = (FILE **)file_p;
 	*pos_p = ftell(*fp);
 	return LV_FS_RES_OK;
+}
+
+// =========================== Auton Selector UI =========================== //
+
+auton::Routine gui::selection() {
+	lv_obj_t *select_scr = lv_page_create(NULL, NULL);
+	lv_scr_load(select_scr);
+}
+
+// ================================ Game UI ================================ //
+
+void gui::game() {
+	lv_obj_t *game_scr = lv_page_create(NULL, NULL);
+	lv_scr_load(game_scr);
 }
 
 // ================================ Methods ================================ //
