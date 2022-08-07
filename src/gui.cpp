@@ -17,7 +17,7 @@ static lv_fs_res_t fs_open(void *file_p, const char *fn, lv_fs_mode_t mode) {
 		flags = "a+";
 
 	char buf[256];
-	sprintf(buf, "/%s", fn);
+	sprintf(buf, "/usd/%s", fn);
 	FILE *f = fopen(buf, flags);
 
 	if (f == NULL)
