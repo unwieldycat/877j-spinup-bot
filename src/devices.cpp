@@ -15,7 +15,9 @@ okapi::Motor drive_rr(4);
 std::shared_ptr<okapi::OdomChassisController> chassis =
     okapi::ChassisControllerBuilder()
         .withMotors(drive_fl, drive_fr, drive_rr, drive_rl)
-        .withDimensions(okapi::AbstractMotor::gearset::green,
-                        {{4_in, 11.5_in}, okapi::imev5GreenTPR})
+        .withDimensions(
+            okapi::AbstractMotor::gearset::green,
+            {{4_in, 11.5_in}, okapi::imev5GreenTPR}
+        )
         .withOdometry()
         .buildOdometry();

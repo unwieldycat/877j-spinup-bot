@@ -37,8 +37,8 @@ static lv_fs_res_t fs_close(void *file_p) {
 	return LV_FS_RES_OK;
 }
 
-static lv_fs_res_t fs_read(void *file_p, void *buf, uint32_t btr,
-                           uint32_t *br) {
+static lv_fs_res_t
+fs_read(void *file_p, void *buf, uint32_t btr, uint32_t *br) {
 	FILE **fp = (FILE **)file_p;
 	*br = fread(buf, 1, btr, *fp);
 	return LV_FS_RES_OK;
