@@ -1,13 +1,6 @@
 #include "auton.hpp"
 
-// =================== Routine Constructor Implementation =================== //
-
-auton::Routine::Routine(std::string _name, auton::start_position_e _pos,
-                        auton::action_t _action) {
-	name = _name;
-	start_pos = _pos;
-	action = _action;
-}
+using namespace auton;
 
 // ============================= Skills Routine ============================= //
 
@@ -15,10 +8,24 @@ void auton::skills() {}
 
 // ============================= Match Routines ============================= //
 
-// Reference routine for future
-auton::Routine example("Example", auton::start_position_e::LEFT, []() {
+/**
+ * Win point routine
+ */
+void solo_awp() {}
 
-});
+/**
+ * Only do closest roller and then move out way
+ */
+void one_roller() {}
 
-// Register all routines here
-std::vector<auton::Routine> auton::routines{example};
+/**
+ * Do both rollers and ignore discs
+ */
+void both_rollers() {}
+
+// ============================ Routine Metadata ============================ //
+
+std::vector<Routine> routines{
+    Routine(solo_awp, start_position_e::LEFT, "Solo Autonomous Win Point"),
+    Routine(one_roller, start_position_e::BOTH, "One Roller"),
+    Routine(both_rollers, start_position_e::RIGHT, "Set Both Rollers")};

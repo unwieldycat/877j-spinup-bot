@@ -14,14 +14,19 @@ typedef std::function<void()> action_t;
 /**
  * Side of the field the robot will start on
  */
-enum class start_position_e { LEFT, RIGHT };
+enum class start_position_e { LEFT, RIGHT, BOTH };
 
 /**
  * Routine data structure
  */
 struct Routine {
-	Routine(std::string _name, start_position_e _pos, action_t _action);
-	std::string name;
+	inline Routine(action_t act, start_position_e pos, std::string desc) {
+		description = desc;
+		start_pos = pos;
+		action = act;
+	}
+
+	std::string description;
 	start_position_e start_pos;
 	action_t action;
 };
