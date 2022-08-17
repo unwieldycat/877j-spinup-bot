@@ -61,6 +61,8 @@ static lv_fs_res_t fs_tell(void *file_p, uint32_t *pos_p) {
 auton::Routine gui::selection() {
 	lv_obj_t *select_scr = lv_page_create(NULL, NULL);
 	lv_scr_load(select_scr);
+
+	// TODO: Make selection UI
 }
 
 // ================================ Game UI ================================ //
@@ -68,6 +70,8 @@ auton::Routine gui::selection() {
 void gui::game() {
 	lv_obj_t *game_scr = lv_page_create(NULL, NULL);
 	lv_scr_load(game_scr);
+
+	// TODO: Make game UI
 }
 
 // ================================ Methods ================================ //
