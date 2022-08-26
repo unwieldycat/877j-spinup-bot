@@ -1,5 +1,7 @@
-877J Spin Up Bot (Name Pending)
-=================================================
-Source code for team 877J's robot for the Vex 2022-23 V5 robot competition.
+Encephalon
+==========
+'Encephalon' (meaning 'brain') is the codebase that powers VRC team 877J's Spin Up competition robot. This program utilizes the PROS library for Vex V5.
 
-<!-- TODO: Create more infomative README -->
+
+__[[Contributing](./CONTRIBUTING.md)] [[Licence](./LICENCE)]__
+
