@@ -39,6 +39,6 @@ extern std::vector<Routine> routines;
 /**
  * The skills routine
  */
-void skills();
+action_t skills();
 
 } // namespace auton
