@@ -77,7 +77,7 @@ lv_res_t done_act() {
 	return LV_RES_OK;
 }
 
-auton::Routine gui::selection() {
+auton::action_t* gui::selection() {
 	// Save pointer to main screen and create new screen for selection
 	lv_obj_t *main_scr = lv_scr_act();
 	lv_obj_t *select_scr = lv_page_create(NULL, NULL);
@@ -123,8 +123,13 @@ auton::Routine gui::selection() {
 	while (!user_is_done && pros::competition::is_disabled())
 		pros::delay(100);
 
+	// Reset screen
+	lv_scr_load(main_scr);
+
 	// Return selected routine
-	return auton::routines.at(selected_r_id); // This shouldnt ever throw an exception, I hope...
+	if (r_selected_id == -1) return &auton::skills;
+	auton::routine sel_r = auton::routines.at(selected_r_id);
+	return &sel_r.action;
 }
 
 // ================================ Game UI ================================ //
