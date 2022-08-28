@@ -1,7 +1,4 @@
 #include "gui.hpp"
-#include "devices.hpp"
-#include "display/lv_core/lv_obj.h"
-#include "pros/misc.hpp"
 
 // ====================== Filesystem Driver Functions ====================== //
 
