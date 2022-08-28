@@ -25,7 +25,7 @@ void both_rollers() {}
 
 // ============================ Routine Metadata ============================ //
 
-std::vector<Routine> routines{
+std::vector<Routine> auton::routines{
     Routine(solo_awp, start_position_e::LEFT, "Solo Autonomous Win Point"),
     Routine(one_roller, start_position_e::BOTH, "One Roller"),
     Routine(both_rollers, start_position_e::RIGHT, "Set Both Rollers")};
