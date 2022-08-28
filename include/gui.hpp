@@ -17,7 +17,7 @@ void init();
  *
  * Returns auton selected by user
  */
-auton::Routine selection();
+auton::action_t selection();
 
 /**
  * Show game UI
