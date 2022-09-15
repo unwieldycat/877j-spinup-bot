@@ -1,4 +1,5 @@
 #include "gui.hpp"
+#include "pros/misc.hpp"
 
 // ====================== Filesystem Driver Functions ====================== //
 
@@ -77,7 +78,6 @@ lv_res_t done_act(lv_obj_t *obj) {
 auton::action_t gui::selection() {
 	// Save pointer to main screen and create new screen for selection
 	lv_obj_t *main_scr = lv_scr_act();
-
 	lv_obj_t *select_scr = lv_obj_create(NULL, NULL);
 	lv_scr_load(select_scr);
 
@@ -120,7 +120,10 @@ auton::action_t gui::selection() {
 	lv_label_set_text(done_label, "Done");
 
 	// Wait for user to be done or for match to start
-	while (!user_is_done)
+	const bool match_has_started =
+	    (pros::competition::is_connected() && !pros::competition::is_disabled());
+
+	while (!user_is_done || match_has_started)
 		pros::delay(100);
 
 	// Reset screen
@@ -129,8 +132,6 @@ auton::action_t gui::selection() {
 	// Return selected routine
 	if (selected_r_id == -1) return auton::skills;
 	auton::Routine routine = auton::routines.at(selected_r_id);
-	std::cout << "Selection done"
-	          << "Selected: " << selected_r_id << std::endl;
 	return routine.action;
 }
 
