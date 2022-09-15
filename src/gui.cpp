@@ -78,7 +78,6 @@ auton::action_t gui::selection() {
 	// Save pointer to main screen and create new screen for selection
 	lv_obj_t *main_scr = lv_scr_act();
 
-	// FIXME: Creating new screen does not work - objects will not draw on new screen
 	lv_obj_t *select_scr = lv_obj_create(NULL, NULL);
 	lv_scr_load(select_scr);
 
