@@ -79,9 +79,8 @@ auton::action_t gui::selection() {
 	lv_obj_t *main_scr = lv_scr_act();
 
 	// FIXME: Creating new screen does not work - objects will not draw on new screen
-	// lv_obj_t *select_scr = lv_obj_create(NULL, NULL);
-	// lv_obj_set_style(select_scr, &lv_style_plain_color);
-	// lv_scr_load(select_scr);
+	lv_obj_t *select_scr = lv_obj_create(NULL, NULL);
+	lv_scr_load(select_scr);
 
 	// Title
 	lv_obj_t *title = lv_label_create(lv_scr_act(), NULL);
@@ -101,6 +100,7 @@ auton::action_t gui::selection() {
 		// Set lvgl button id
 		lv_obj_t *new_btn = lv_list_add(r_list, NULL, r.description.c_str(), r_select_act);
 		lv_obj_set_free_num(new_btn, r_index);
+		lv_btn_set_action(new_btn, LV_BTN_ACTION_CLICK, &r_select_act);
 
 		r_index++;
 	}
@@ -130,6 +130,8 @@ auton::action_t gui::selection() {
 	// Return selected routine
 	if (selected_r_id == -1) return auton::skills;
 	auton::Routine routine = auton::routines.at(selected_r_id);
+	std::cout << "Selection done"
+	          << "Selected: " << selected_r_id << std::endl;
 	return routine.action;
 }
 
