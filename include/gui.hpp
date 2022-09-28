@@ -13,11 +13,11 @@ namespace gui {
 void init();
 
 /**
- * Show autonomous selection UI
+ * Open autonomous selection window
  *
  * Returns auton selected by user
  */
-auton::action_t selection();
+auton::action_t auton_selection();
 
 /**
  * Show game UI

@@ -75,21 +75,28 @@ lv_res_t done_act(lv_obj_t *obj) {
 	return LV_RES_OK;
 }
 
-auton::action_t gui::selection() {
-	// Save pointer to main screen and create new screen for selection
-	lv_obj_t *main_scr = lv_scr_act();
-	lv_obj_t *select_scr = lv_obj_create(NULL, NULL);
-	lv_scr_load(select_scr);
+auton::action_t gui::auton_selection() {
+	// Style to remove padding from window background
+	lv_style_t win_style;
+	lv_style_copy(&win_style, &lv_style_transp);
+	win_style.body.padding.ver = 0;
+
+	// Create a window
+	lv_obj_t *select_win = lv_win_create(lv_scr_act(), NULL);
+	lv_win_set_style(select_win, LV_WIN_STYLE_CONTENT_BG, &win_style);
+	lv_win_set_btn_size(select_win, 12);
+	lv_win_set_title(select_win, "Autonomous Selection");
+	lv_obj_t *win_close_btn = lv_win_add_btn(select_win, SYMBOL_CLOSE, lv_win_close_action);
 
 	// Title
-	lv_obj_t *title = lv_label_create(lv_scr_act(), NULL);
+	lv_obj_t *title = lv_label_create(select_win, NULL);
 	lv_label_set_text(title, "Select autonomous routine");
-	lv_obj_align(title, NULL, LV_ALIGN_IN_TOP_LEFT, 8, 8);
+	lv_obj_align(title, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 
 	// Routines list
-	lv_obj_t *r_list = lv_list_create(lv_scr_act(), NULL);
-	lv_obj_align(r_list, NULL, LV_ALIGN_IN_TOP_LEFT, 8, 32);
-	lv_obj_set_size(r_list, 232, 160);
+	lv_obj_t *r_list = lv_list_create(select_win, NULL);
+	lv_obj_align(r_list, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 48);
+	lv_obj_set_size(r_list, 232, 130);
 
 	// Add routines to list
 	for (auton::Routine r : auton::routines) {
@@ -111,10 +118,10 @@ auton::action_t gui::selection() {
 	lv_obj_set_free_num(skills_btn, -1);
 
 	// Done button
-	lv_obj_t *done = lv_btn_create(lv_scr_act(), NULL);
+	lv_obj_t *done = lv_btn_create(select_win, NULL);
 	lv_obj_align(done, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 8, 8);
-	lv_obj_set_pos(done, 8, 200);
-	lv_obj_set_size(done, 232, 32);
+	lv_obj_set_pos(done, 0, 176);
+	lv_obj_set_size(done, 232, 30);
 	lv_btn_set_action(done, LV_BTN_ACTION_CLICK, &done_act);
 	lv_obj_t *done_label = lv_label_create(done, NULL);
 	lv_label_set_text(done_label, "Done");
@@ -126,8 +133,8 @@ auton::action_t gui::selection() {
 	while (!user_is_done || match_has_started)
 		pros::delay(100);
 
-	// Reset screen
-	lv_scr_load(main_scr);
+	// Close Window
+	lv_win_close_action(win_close_btn);
 
 	// Return selected routine
 	if (selected_r_id == -1) return auton::skills;
@@ -158,6 +165,12 @@ void gui::init() {
 	fs_driver.seek = fs_seek;
 	fs_driver.tell = fs_tell;
 	lv_fs_add_drv(&fs_driver);
+
+	if (!pros::usd::is_installed()) {
+		lv_obj_t *error_label = lv_label_create(lv_scr_act(), NULL);
+		lv_label_set_text(error_label, "Error: SD card is not installed!");
+		lv_obj_align(error_label, NULL, LV_ALIGN_IN_TOP_MID, 0, 8);
+	}
 
 	// TODO: Splash screen
 }
