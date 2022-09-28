@@ -7,7 +7,7 @@
 
 void initialize() {
 	gui::init();
-	gui::selection(); // temp
+	gui::auton_selection(); // temp
 }
 
 void competition_initialize() {}
