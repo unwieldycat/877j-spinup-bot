@@ -7,6 +7,7 @@
 
 void initialize() {
 	gui::init();
+	gui::team_selection();  // temp
 	gui::auton_selection(); // temp
 }
 

@@ -55,7 +55,84 @@ static lv_fs_res_t fs_tell(void *file_p, uint32_t *pos_p) {
 	return LV_FS_RES_OK;
 }
 
-// =========================== Auton Selector UI =========================== //
+// ========================== Team Selector Window ========================== //
+
+int selected_t = 0;
+bool t_sel_done = false;
+
+lv_res_t t_select_act(lv_obj_t *obj) {
+	selected_t = lv_obj_get_free_num(obj);
+	t_sel_done = true;
+
+	return LV_RES_OK;
+}
+
+int gui::team_selection() {
+	// Style to remove padding from window background
+	lv_style_t win_style;
+	lv_style_copy(&win_style, &lv_style_transp);
+	win_style.body.padding.ver = 0;
+
+	// Create a window
+	lv_obj_t *team_win = lv_win_create(lv_scr_act(), NULL);
+	lv_win_set_style(team_win, LV_WIN_STYLE_CONTENT_BG, &win_style);
+	lv_win_set_btn_size(team_win, 12);
+	lv_win_set_title(team_win, "Team Selection");
+	lv_obj_t *win_close_btn = lv_win_add_btn(team_win, SYMBOL_CLOSE, lv_win_close_action);
+
+	// Title
+	lv_obj_t *title = lv_label_create(team_win, NULL);
+	lv_label_set_text(title, "Select team");
+	lv_obj_align(title, NULL, LV_ALIGN_IN_TOP_MID, 0, 0);
+
+	// Blue button style
+	lv_style_t blue_style;
+	lv_style_copy(&blue_style, &lv_style_pretty);
+	blue_style.body.border.color = LV_COLOR_BLUE;
+	blue_style.body.main_color = LV_COLOR_BLUE;
+	blue_style.body.grad_color = LV_COLOR_BLUE;
+
+	// Blue button
+	lv_obj_t *blue_btn = lv_btn_create(team_win, NULL);
+	lv_obj_set_style(blue_btn, &blue_style);
+	lv_obj_align(blue_btn, NULL, LV_ALIGN_CENTER, -96, 128);
+	lv_obj_set_size(blue_btn, 128, 48);
+	lv_btn_set_action(blue_btn, LV_BTN_ACTION_CLICK, &t_select_act);
+	lv_obj_set_free_num(blue_btn, 1);
+	lv_obj_t *blue_label = lv_label_create(blue_btn, NULL);
+	lv_label_set_text(blue_label, "Blue");
+
+	// Red button style
+	lv_style_t red_style;
+	lv_style_copy(&red_style, &lv_style_pretty);
+	red_style.body.border.color = LV_COLOR_RED;
+	red_style.body.main_color = LV_COLOR_RED;
+	red_style.body.grad_color = LV_COLOR_RED;
+
+	// Red button
+	lv_obj_t *red_btn = lv_btn_create(team_win, NULL);
+	lv_obj_set_style(red_btn, &red_style);
+	lv_obj_align(red_btn, NULL, LV_ALIGN_CENTER, 96, 82);
+	lv_obj_set_size(red_btn, 128, 48);
+	lv_obj_set_free_num(red_btn, 2);
+	lv_obj_t *red_label = lv_label_create(red_btn, NULL);
+	lv_label_set_text(red_label, "Red");
+
+	const bool match_has_started =
+	    (pros::competition::is_connected() && !pros::competition::is_disabled());
+
+	// Wait for user input or for match to start
+	while (!t_sel_done || match_has_started)
+		pros::delay(100);
+
+	// Close Window
+	lv_win_close_action(win_close_btn);
+
+	// Return team id
+	return selected_t;
+}
+
+// ========================= Auton Selector Window ========================= //
 
 int selected_r_id;
 
@@ -67,11 +144,11 @@ lv_res_t r_select_act(lv_obj_t *obj) {
 	return LV_RES_OK;
 }
 
-bool user_is_done = false;
+bool r_sel_done = false;
 
 // Action for done button
 lv_res_t done_act(lv_obj_t *obj) {
-	user_is_done = true;
+	r_sel_done = true;
 	return LV_RES_OK;
 }
 
@@ -130,7 +207,7 @@ auton::action_t gui::auton_selection() {
 	const bool match_has_started =
 	    (pros::competition::is_connected() && !pros::competition::is_disabled());
 
-	while (!user_is_done || match_has_started)
+	while (!r_sel_done || match_has_started)
 		pros::delay(100);
 
 	// Close Window
