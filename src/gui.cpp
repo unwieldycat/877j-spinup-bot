@@ -120,12 +120,11 @@ int gui::team_selection() {
 	lv_obj_t *red_label = lv_label_create(red_btn, NULL);
 	lv_label_set_text(red_label, "Red");
 
-	const bool match_has_started =
-	    (pros::competition::is_connected() && !pros::competition::is_disabled());
-
 	// Wait for user input or for match to start
-	while (!t_sel_done || match_has_started)
+	while (!t_sel_done) {
+		if (pros::competition::is_connected() && !pros::competition::is_disabled()) break;
 		pros::delay(100);
+	}
 
 	// Close Window
 	lv_obj_del(team_win);
@@ -209,8 +208,10 @@ auton::action_t gui::auton_selection() {
 	const bool match_has_started =
 	    (pros::competition::is_connected() && !pros::competition::is_disabled());
 
-	while (!r_sel_done || match_has_started)
+	while (!r_sel_done) {
+		if (pros::competition::is_connected() && !pros::competition::is_disabled()) break;
 		pros::delay(100);
+	}
 
 	lv_obj_del(select_win);
 
@@ -249,6 +250,4 @@ void gui::init() {
 		lv_label_set_text(error_label, "Error: SD card is not installed!");
 		lv_obj_align(error_label, NULL, LV_ALIGN_IN_TOP_MID, 0, 8);
 	}
-
-	// TODO: Splash screen
 }
