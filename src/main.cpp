@@ -5,13 +5,12 @@
 
 // ============================= Initalization ============================= //
 
-void initialize() {
-	gui::init();
-	gui::team_selection();  // temp
-	gui::auton_selection(); // temp
-}
+void initialize() { gui::init(); }
 
-void competition_initialize() {}
+void competition_initialize() {
+	gui::team_selection();
+	gui::auton_selection();
+}
 
 // ============================== Main Methods ============================== //
 
