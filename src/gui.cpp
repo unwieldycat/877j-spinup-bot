@@ -88,14 +88,14 @@ int gui::team_selection() {
 
 	// Blue button style
 	lv_style_t blue_style;
-	lv_style_copy(&blue_style, &lv_style_pretty);
+	lv_style_copy(&blue_style, lv_btn_get_style(win_close_btn, LV_BTN_STYLE_INA));
 	blue_style.body.border.color = LV_COLOR_BLUE;
 	blue_style.body.main_color = LV_COLOR_BLUE;
 	blue_style.body.grad_color = LV_COLOR_BLUE;
 
 	// Blue button
 	lv_obj_t *blue_btn = lv_btn_create(team_win, NULL);
-	lv_obj_set_style(blue_btn, &blue_style);
+	lv_btn_set_style(blue_btn, LV_BTN_STYLE_REL, &blue_style);
 	lv_obj_align(blue_btn, NULL, LV_ALIGN_CENTER, -96, 128);
 	lv_obj_set_size(blue_btn, 128, 48);
 	lv_btn_set_action(blue_btn, LV_BTN_ACTION_CLICK, &t_select_act);
@@ -105,16 +105,17 @@ int gui::team_selection() {
 
 	// Red button style
 	lv_style_t red_style;
-	lv_style_copy(&red_style, &lv_style_pretty);
+	lv_style_copy(&red_style, lv_btn_get_style(win_close_btn, LV_BTN_STYLE_INA));
 	red_style.body.border.color = LV_COLOR_RED;
 	red_style.body.main_color = LV_COLOR_RED;
 	red_style.body.grad_color = LV_COLOR_RED;
 
 	// Red button
 	lv_obj_t *red_btn = lv_btn_create(team_win, NULL);
-	lv_obj_set_style(red_btn, &red_style);
+	lv_btn_set_style(red_btn, LV_BTN_STYLE_REL, &red_style);
 	lv_obj_align(red_btn, NULL, LV_ALIGN_CENTER, 96, 82);
 	lv_obj_set_size(red_btn, 128, 48);
+	lv_btn_set_action(red_btn, LV_BTN_ACTION_CLICK, &t_select_act);
 	lv_obj_set_free_num(red_btn, 2);
 	lv_obj_t *red_label = lv_label_create(red_btn, NULL);
 	lv_label_set_text(red_label, "Red");
