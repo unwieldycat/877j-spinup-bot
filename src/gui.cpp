@@ -78,7 +78,8 @@ int gui::team_selection() {
 	lv_win_set_style(team_win, LV_WIN_STYLE_CONTENT_BG, &win_style);
 	lv_win_set_btn_size(team_win, 12);
 	lv_win_set_title(team_win, "Team Selection");
-	lv_obj_t *win_close_btn = lv_win_add_btn(team_win, SYMBOL_CLOSE, lv_win_close_action);
+	lv_obj_t *win_close_btn = lv_win_add_btn(team_win, SYMBOL_CLOSE, t_select_act);
+	lv_obj_set_free_num(win_close_btn, 0);
 
 	// Title
 	lv_obj_t *title = lv_label_create(team_win, NULL);
@@ -126,7 +127,7 @@ int gui::team_selection() {
 		pros::delay(100);
 
 	// Close Window
-	lv_win_close_action(win_close_btn);
+	lv_obj_del(team_win);
 
 	// Return team id
 	return selected_t;
@@ -163,7 +164,7 @@ auton::action_t gui::auton_selection() {
 	lv_win_set_style(select_win, LV_WIN_STYLE_CONTENT_BG, &win_style);
 	lv_win_set_btn_size(select_win, 12);
 	lv_win_set_title(select_win, "Autonomous Selection");
-	lv_obj_t *win_close_btn = lv_win_add_btn(select_win, SYMBOL_CLOSE, lv_win_close_action);
+	lv_obj_t *win_close_btn = lv_win_add_btn(select_win, SYMBOL_CLOSE, done_act);
 
 	// Title
 	lv_obj_t *title = lv_label_create(select_win, NULL);
@@ -210,8 +211,7 @@ auton::action_t gui::auton_selection() {
 	while (!r_sel_done || match_has_started)
 		pros::delay(100);
 
-	// Close Window
-	lv_win_close_action(win_close_btn);
+	lv_obj_del(select_win);
 
 	// Return selected routine
 	if (selected_r_id == -1) return auton::skills;
