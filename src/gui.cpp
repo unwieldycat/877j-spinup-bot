@@ -223,12 +223,22 @@ auton::action_t gui::auton_selection() {
 
 // ================================ Game UI ================================ //
 
-void gui::game() {
-	lv_obj_t *game_scr = lv_page_create(NULL, NULL);
-	lv_scr_load(game_scr);
+char *get_mode_as_c_str() {
+	if (!pros::competition::is_connected()) return (char *)"not connected";
 
-	// TODO: Make game UI
+	switch (pros::competition::get_status()) {
+	case (COMPETITION_DISABLED):
+		return (char *)"disabled";
+
+	case (COMPETITION_AUTONOMOUS):
+		return (char *)"autonomous";
+
+	default:
+		return (char *)"driver control";
+	}
 }
+
+void gui::game() {}
 
 // ================================ Methods ================================ //
 
