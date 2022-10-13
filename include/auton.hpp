@@ -1,5 +1,6 @@
 #pragma once
 
+#include "devices.hpp"
 #include "main.hpp"
 
 // ===================== Autonomous System Definitions ===================== //
