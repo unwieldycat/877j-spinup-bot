@@ -7,11 +7,17 @@
 // Inputs
 extern okapi::Controller controller;
 
+// Sensors
+extern pros::Distance distance;
+extern pros::Optical optical;
+
 // Motors
 extern okapi::Motor drive_fl;
 extern okapi::Motor drive_fr;
 extern okapi::Motor drive_rl;
 extern okapi::Motor drive_rr;
+
+extern pros::Motor roller;
 
 // Chassis
 extern std::shared_ptr<okapi::OdomChassisController> chassis;
