@@ -21,3 +21,6 @@ extern pros::Motor roller;
 
 // Chassis
 extern std::shared_ptr<okapi::OdomChassisController> chassis;
+
+// Functions
+extern void do_roller(void);
