@@ -3,13 +3,18 @@
 #include "gui.hpp"
 #include "manual.hpp"
 
+// =============================== Variables ================================ //
+
+int team;
+auton::action_t auton_routine;
+
 // ============================= Initalization ============================= //
 
 void initialize() { gui::init(); }
 
 void competition_initialize() {
-	gui::team_selection();
-	gui::auton_selection();
+	team = gui::team_selection();
+	auton_routine = gui::auton_selection();
 }
 
 // ============================== Main Methods ============================== //
