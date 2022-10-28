@@ -25,4 +25,4 @@ extern pros::Motor intake;
 extern std::shared_ptr<okapi::OdomChassisController> chassis;
 
 // Functions
-extern void do_roller(void);
+extern void auto_roller(void);
