@@ -30,17 +30,20 @@ std::shared_ptr<okapi::OdomChassisController> chassis =
 
 // ============================ Device functions ============================ //
 
-void do_roller() {
-	if (distance.get() > 50) return;
-	const int hue = optical.get_hue();
+void auto_roller() {
+	// FIXME: Just doesnt work properly 👍
+	while (distance.get() < 50) {
+		int hue = optical.get_hue();
 
-	if ((hue < 10 || hue > 350) && team == team_e::TEAM_RED) { // Color is red
 		roller.move(127);
 		pros::delay(1000);
-	}
 
-	if ((hue < 260 || hue > 190) && team == team_e::TEAM_BLUE) { // Color is blue
-		roller.move(127);
-		pros::delay(1000);
+		// If the optical sensor detects red then blue is
+		// selected and vice versa
+		if ((hue < 10 || hue > 350) && team == team_e::TEAM_BLUE ||
+		    (hue < 260 || hue > 190) && team == team_e::TEAM_RED) {
+			roller.brake();
+			break;
+		}
 	}
 }
