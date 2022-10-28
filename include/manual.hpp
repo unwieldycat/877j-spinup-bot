@@ -12,4 +12,9 @@ namespace manual {
  */
 void drive_control();
 
+/**
+ *  Manual control for launcher
+ */
+void launch_control();
+
 } // namespace manual

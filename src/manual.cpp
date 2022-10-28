@@ -1,4 +1,7 @@
 #include "manual.hpp"
+#include "okapi/impl/device/controllerUtil.hpp"
+#include "pros/misc.h"
+#include "pros/rtos.hpp"
 
 // ======================== Manual Control Functions ======================== //
 
@@ -12,8 +15,7 @@ void manual::drive_control() {
 		float strafe = controller.getAnalog(okapi::ControllerAnalog::leftX);
 
 		// Check against deadzone
-		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05 ||
-		    -0.05 < strafe > 0.05) {
+		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05 || -0.05 < strafe > 0.05) {
 			// Move motors
 			drive_fl.moveVelocity((drive + strafe + turn) * 200);
 			drive_fr.moveVelocity((-drive + strafe + turn) * 200);
@@ -36,4 +38,19 @@ void manual::drive_control() {
 	}
 }
 
-// When additional components are finalized there will be more functions
+void manual::launch_control() {
+	// Variable to record active state
+	bool active = false;
+	while (true) {
+		if (controller.getDigital(okapi::ControllerDigital::A)) {
+			launcher.move(127);
+			active = true;
+		} else if (active) {
+			launcher.brake();
+			active = false;
+		}
+
+		// Wait before next loop to take load off CPU
+		pros::delay(20);
+	}
+}
