@@ -42,7 +42,7 @@ void manual::launch_control() {
 	// Variable to record active state
 	bool active = false;
 	while (true) {
-		if (controller.getDigital(okapi::ControllerDigital::A)) {
+		if (controller.getDigital(okapi::ControllerDigital::A) && active == false) {
 			launcher.move(127);
 			active = true;
 		} else if (active) {
