@@ -18,6 +18,8 @@ extern okapi::Motor drive_rl;
 extern okapi::Motor drive_rr;
 
 extern pros::Motor roller;
+extern pros::Motor launcher;
+extern pros::Motor intake;
 
 // Chassis
 extern std::shared_ptr<okapi::OdomChassisController> chassis;

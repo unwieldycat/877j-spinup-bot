@@ -17,6 +17,8 @@ okapi::Motor drive_rl(3);
 okapi::Motor drive_rr(4);
 
 pros::Motor roller(5);
+pros::Motor launcher(6);
+pros::Motor intake(7);
 
 // Chassis
 std::shared_ptr<okapi::OdomChassisController> chassis =
