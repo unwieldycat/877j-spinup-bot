@@ -26,3 +26,6 @@ extern std::shared_ptr<okapi::OdomChassisController> chassis;
 
 // Functions
 extern void auto_roller(void);
+extern void roller_control(void);
+extern void drive_control(void);
+extern void launch_control(void);
