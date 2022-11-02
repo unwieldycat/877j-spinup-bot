@@ -99,3 +99,12 @@ void launch_control() {
 		pros::delay(20);
 	}
 }
+
+void expand() {
+	while (true) {
+		if (controller.getDigital(okapi::ControllerDigital::B)) {
+			expansion_l.move(127);
+			expansion_r.move(127);
+		}
+	}
+}
