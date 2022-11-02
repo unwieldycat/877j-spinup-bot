@@ -83,7 +83,7 @@ void drive_control() {
 	}
 }
 
-void expand() {
+void expand_control() {
 	while (true) {
 		if (controller.getDigital(okapi::ControllerDigital::B)) {
 			expansion_l.move(127);
