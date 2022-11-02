@@ -1,7 +1,6 @@
 #include "main.hpp"
 #include "devices.hpp"
 #include "gui.hpp"
-#include "manual.hpp"
 
 // =============================== Variables ================================ //
 
@@ -23,4 +22,7 @@ void disabled() {}
 
 void autonomous() {}
 
-void opcontrol() { pros::Task drive_task(manual::drive_control); }
+void opcontrol() {
+	pros::Task drive_task(drive_control);
+	pros::Task launch_task(launch_control);
+}
