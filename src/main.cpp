@@ -25,4 +25,5 @@ void autonomous() {}
 void opcontrol() {
 	pros::Task drive_task(drive_control);
 	pros::Task expansion_task(expand_control);
+	pros::Task roller_task(roller_control);
 }

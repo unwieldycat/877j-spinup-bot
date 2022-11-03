@@ -1,4 +1,5 @@
 #include "devices.hpp"
+#include "okapi/impl/device/controllerUtil.hpp"
 #include "pros/distance.hpp"
 
 // ================================ Devices ================================ //
@@ -46,6 +47,25 @@ void auto_roller() {
 		    (hue < 260 || hue > 190) && team == team_e::TEAM_RED) {
 			roller.brake();
 			break;
+		}
+	}
+}
+
+void roller_control() {
+	bool active = false;
+	while (true) {
+		bool foward = controller.getDigital(okapi::ControllerDigital::L1);
+		bool back = controller.getDigital(okapi::ControllerDigital::L2);
+
+		if (foward) {
+			roller.move(127);
+			active = true;
+		} else if (back) {
+			roller.move(-127);
+			active = true;
+		} else if (active) {
+			roller.brake();
+			active = false;
 		}
 	}
 }
