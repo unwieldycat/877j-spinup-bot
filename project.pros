@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "877J-Spin-Up",
+    "project_name": "877J-TEMPBOT",
     "target": "v5",
     "templates": {
       "kernel": {
