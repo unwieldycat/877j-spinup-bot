@@ -60,10 +60,10 @@ void roller_control() {
 		bool foward = controller.getDigital(okapi::ControllerDigital::L1);
 		bool back = controller.getDigital(okapi::ControllerDigital::L2);
 
-		if (foward) {
+		if (foward && !active) {
 			roller.move(127);
 			active = true;
-		} else if (back) {
+		} else if (back && !active) {
 			roller.move(-127);
 			active = true;
 		} else if (active) {
