@@ -9,23 +9,26 @@ void auton::skills() {}
 // ============================= Match Routines ============================= //
 
 /**
- * Win point routine
+ * Do the left side roller
  */
-void solo_awp() {}
+void left_roller() {
+	chassis->moveDistance(-0.5_ft);
+	auto_roller();
+}
 
 /**
- * Only do closest roller and then move out way
+ * Do the right side roller
  */
-void one_roller() {}
-
-/**
- * Do both rollers and ignore discs
- */
-void both_rollers() {}
+void right_roller() {
+	chassis->turnAngle(-90_deg);
+	chassis->moveDistance(2_ft);
+	chassis->turnAngle(90_deg);
+	chassis->moveDistance(-0.5_ft);
+	auto_roller();
+}
 
 // ============================ Routine Metadata ============================ //
 
 std::vector<Routine> auton::routines{
-    Routine(solo_awp, start_position_e::LEFT, "Solo Autonomous Win Point"),
-    Routine(one_roller, start_position_e::BOTH, "Set One Roller"),
-    Routine(both_rollers, start_position_e::RIGHT, "Set Both Rollers")};
+    Routine(left_roller, start_position_e::LEFT, "Do left side roller (Start on same tile)"),
+    Routine(right_roller, start_position_e::RIGHT, "Do right side roller (Start on closest tile)")};
