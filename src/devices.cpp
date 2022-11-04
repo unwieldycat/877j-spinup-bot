@@ -35,18 +35,21 @@ std::shared_ptr<okapi::OdomChassisController> chassis =
 
 void auto_roller() {
 	// FIXME: Just doesnt work properly 👍
-	while (distance.get() < 50) {
+	bool done = false;
+	team = team_e::TEAM_RED;
+	while (!done) {
+		if (distance.get() > 100) done = true;
 		int hue = optical.get_hue();
 
-		roller.move(127);
-		pros::delay(1000);
+		roller.move(64);
+		pros::delay(500);
 
 		// If the optical sensor detects red then blue is
 		// selected and vice versa
 		if ((hue < 10 || hue > 350) && team == team_e::TEAM_BLUE ||
 		    (hue < 260 || hue > 190) && team == team_e::TEAM_RED) {
 			roller.brake();
-			break;
+			done = true;
 		}
 	}
 }
@@ -77,15 +80,14 @@ void drive_control() {
 		// Get inputs from controller
 		float turn = controller.getAnalog(okapi::ControllerAnalog::rightX);
 		float drive = controller.getAnalog(okapi::ControllerAnalog::leftY);
-		float strafe = controller.getAnalog(okapi::ControllerAnalog::leftX);
 
 		// Check against deadzone
-		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05 || -0.05 < strafe > 0.05) {
+		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05) {
 			// Move motors
-			drive_fl.moveVelocity((drive + strafe + turn) * 200);
-			drive_fr.moveVelocity((-drive + strafe + turn) * 200);
-			drive_rl.moveVelocity((drive - strafe + turn) * 200);
-			drive_rr.moveVelocity((-drive - strafe + turn) * 200);
+			drive_fl.moveVelocity((drive + turn) * 200);
+			drive_fr.moveVelocity((-drive + turn) * 200);
+			drive_rl.moveVelocity((drive + turn) * 200);
+			drive_rr.moveVelocity((-drive + turn) * 200);
 
 			active = true;
 		} else if (active == true) { // If in deadzone check if active
