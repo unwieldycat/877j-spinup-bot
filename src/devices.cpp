@@ -21,10 +21,14 @@ pros::Motor roller(5);
 pros::Motor expansion_l(11);
 pros::Motor expansion_r(12);
 
+// Drivetrain motor groups
+okapi::MotorGroup left_drive({drive_fl, drive_rl});
+okapi::MotorGroup right_drive({drive_fr, drive_rr});
+
 // Chassis
 std::shared_ptr<okapi::OdomChassisController> chassis =
     okapi::ChassisControllerBuilder()
-        .withMotors(drive_fl, drive_fr, drive_rr, drive_rl)
+        .withMotors(left_drive, right_drive)
         .withDimensions(
             okapi::AbstractMotor::gearset::green, {{4_in, 11.5_in}, okapi::imev5GreenTPR}
         )
