@@ -84,18 +84,29 @@ void roller_control() {
 void drive_control() {
 	// Variable to record robot state
 	bool active = false;
+	bool invert = false;
+	bool invert_debounce = false;
+
 	while (true) {
 		// Get inputs from controller
 		float turn = controller.getAnalog(okapi::ControllerAnalog::rightX);
 		float drive = controller.getAnalog(okapi::ControllerAnalog::leftY);
+		bool controller_x = controller.getDigital(okapi::ControllerDigital::X);
+
+		if (invert_debounce == false && controller_x) {
+			invert = !invert;
+			invert_debounce = true;
+		} else if (invert_debounce == true && !controller_x) {
+			invert_debounce = false;
+		}
 
 		// Check against deadzone
 		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05) {
 			// Move motors
-			drive_fl.moveVelocity((drive + turn) * 200);
-			drive_fr.moveVelocity((-drive + turn) * 200);
-			drive_rl.moveVelocity((drive + turn) * 200);
-			drive_rr.moveVelocity((-drive + turn) * 200);
+			drive_fl.moveVelocity(invert ? -(drive + turn) * 200 : (drive + turn) * 200);
+			drive_fr.moveVelocity(invert ? -(-drive + turn) * 200 : (-drive + turn) * 200);
+			drive_rl.moveVelocity(invert ? -(drive + turn) * 200 : (drive + turn) * 200);
+			drive_rr.moveVelocity(invert ? -(-drive + turn) * 200 : (-drive + turn) * 200);
 
 			active = true;
 		} else if (active == true) { // If in deadzone check if active
