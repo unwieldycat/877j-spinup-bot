@@ -18,7 +18,7 @@ okapi::Motor drive_rl(3);
 okapi::Motor drive_rr(4);
 
 pros::Motor roller(5);
-pros::Motor expansion_l(11);
+pros::Motor expansion_l(-11);
 pros::Motor expansion_r(12);
 
 // Drivetrain motor groups
@@ -114,10 +114,18 @@ void drive_control() {
 }
 
 void expand_control() {
+	bool active = false;
 	while (true) {
-		if (controller.getDigital(okapi::ControllerDigital::B)) {
-			expansion_l.move(127);
-			expansion_r.move(127);
+		if (controller.getDigital(okapi::ControllerDigital::A) && active == false) {
+			expansion_l.move(32);
+			expansion_r.move(32);
+			active = true;
+		}
+
+		if (controller.getDigital(okapi::ControllerDigital::B) && active == true) {
+			expansion_l.brake();
+			expansion_r.brake();
+			active = false;
 		}
 	}
 }
