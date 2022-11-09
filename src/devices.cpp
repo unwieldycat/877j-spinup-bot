@@ -43,7 +43,7 @@ void auto_roller() {
 		// If the optical sensor detects red then blue is
 		// selected and vice versa
 		if ((hue < 10 || hue > 350) && team == team_e::TEAM_BLUE ||
-		    (hue < 260 || hue > 190) && team == team_e::TEAM_RED) {
+		    (hue < 260 && hue > 190) && team == team_e::TEAM_RED) {
 			roller.brake();
 			break;
 		}
