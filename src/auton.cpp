@@ -16,25 +16,43 @@ void solo_awp() {}
 /**
  * Only do closest roller and then move out way
  */
-void one_roller_close() {}
+void one_roller_right() {}
 
 /**
  * Do both rollers and ignore discs
  */
-void both_rollers_infront() {
+void both_rollers_right() {
 	auto_roller();
-	chassis->turnToAngle(-45_deg);
-	chassis->moveDistance(-7_ft);
+	chassis->driveToPoint({-5_ft, -5_ft});
 	chassis->turnToAngle(-90_deg);
+	chassis->driveToPoint({-11_ft, -11_ft});
 	auto_roller();
 }
 
-void both_rollers_notinfront() {}
+void both_rollers_left() {
+	chassis->driveToPoint({-1.5_ft, 0_ft});
+	auto_roller();
+	chassis->driveToPoint({5_ft, 5_ft});
+	chassis->driveToPoint({11_ft, 11_ft});
+	chassis->turnToAngle(90_deg);
+	auto_roller();
+}
+
+void awp_left() {}
+
+void awp_right() {
+	launcher.move_velocity(+200);
+	auto_roller();
+	chassis->driveToPoint({-5.5_ft, -5.5_ft});
+	chassis->turnToAngle(135_deg);
+}
 
 // ============================ Routine Metadata ============================ //
 
 std::vector<Routine> auton::routines{
     Routine(solo_awp, start_position_e::LEFT, "Solo Autonomous Win Point"),
-    Routine(one_roller_close, start_position_e::BOTH, "Set One Roller"),
-    Routine(both_rollers_infront, start_position_e::LEFT, "Set Both Rollers"),
-    Routine(both_rollers_notinfront, start_position_e::RIGHT, "Set Both Rollers")};
+    Routine(one_roller_right, start_position_e::BOTH, "Set One Roller"),
+    Routine(both_rollers_right, start_position_e::LEFT, "Set Both Rollers"),
+    Routine(both_rollers_left, start_position_e::RIGHT, "Set Both Rollers"),
+    Routine(awp_left, start_position_e::RIGHT, "Set Both Rollers"),
+    Routine(awp_right, start_position_e::RIGHT, "Set Both Rollers")};
