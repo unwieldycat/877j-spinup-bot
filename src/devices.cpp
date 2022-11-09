@@ -18,7 +18,7 @@ okapi::Motor drive_rl(3);
 okapi::Motor drive_rr(4);
 
 pros::Motor roller(5);
-pros::Motor expansion_l(-11);
+pros::Motor expansion_l(11);
 pros::Motor expansion_r(12);
 
 // Drivetrain motor groups
@@ -65,12 +65,12 @@ void roller_control() {
 		bool back = controller.getDigital(okapi::ControllerDigital::L2);
 
 		if (foward && !back && !active) {
-			roller.move(127);
+			roller.move(-127);
 			active = true;
 		}
 
 		if (back && !foward && !active) {
-			roller.move(-127);
+			roller.move(127);
 			active = true;
 		}
 
@@ -103,10 +103,10 @@ void drive_control() {
 		// Check against deadzone
 		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05) {
 			// Move motors
-			drive_fl.moveVelocity(invert ? -(drive + turn) * 200 : (drive + turn) * 200);
-			drive_fr.moveVelocity(invert ? -(-drive + turn) * 200 : (-drive + turn) * 200);
-			drive_rl.moveVelocity(invert ? -(drive + turn) * 200 : (drive + turn) * 200);
-			drive_rr.moveVelocity(invert ? -(-drive + turn) * 200 : (-drive + turn) * 200);
+			drive_fl.moveVelocity(invert ? (-drive + turn) * 100 : (drive + turn) * 200);
+			drive_fr.moveVelocity(invert ? (drive + turn) * 100 : (-drive + turn) * 200);
+			drive_rl.moveVelocity(invert ? (-drive + turn) * 100 : (drive + turn) * 200);
+			drive_rr.moveVelocity(invert ? (drive + turn) * 100 : (-drive + turn) * 200);
 
 			active = true;
 		} else if (active == true) { // If in deadzone check if active
@@ -126,17 +126,12 @@ void drive_control() {
 
 void expand_control() {
 	bool active = false;
-	while (true) {
-		if (controller.getDigital(okapi::ControllerDigital::A) && active == false) {
-			expansion_l.move(32);
-			expansion_r.move(32);
-			active = true;
-		}
 
-		if (controller.getDigital(okapi::ControllerDigital::B) && active == true) {
-			expansion_l.brake();
-			expansion_r.brake();
-			active = false;
+	while (true) {
+		if (controller.getDigital(okapi::ControllerDigital::A) && !active) {
+			expansion_l.move(96);
+			expansion_r.move(-96);
+			active = true;
 		}
 	}
 }
