@@ -238,7 +238,14 @@ char *get_mode_as_c_str() {
 	}
 }
 
-void gui::game() {}
+void gui::game() {
+	while (true) {
+		lv_obj_t *mode_label = lv_label_create(lv_scr_act(), NULL);
+		lv_label_set_text(mode_label, get_mode_as_c_str());
+		lv_obj_align(mode_label, NULL, LV_ALIGN_IN_TOP_MID, 0, 16);
+		pros::delay(1000);
+	}
+}
 
 // ================================ Methods ================================ //
 
