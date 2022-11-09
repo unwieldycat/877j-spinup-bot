@@ -16,6 +16,8 @@ void solo_awp() {}
 /**
  * Only do closest roller and then move out way
  */
+void preload() { chassis->driveToPoint({2_ft, 0_ft}); }
+
 void one_roller_right() {}
 
 /**
@@ -41,7 +43,7 @@ void both_rollers_left() {
 void awp_left() {}
 
 void awp_right() {
-	launcher.move_velocity(+200);
+	launcher.move(127);
 	auto_roller();
 	chassis->driveToPoint({-5.5_ft, -5.5_ft});
 	chassis->turnToAngle(135_deg);
