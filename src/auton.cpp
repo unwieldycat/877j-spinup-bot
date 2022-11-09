@@ -8,12 +8,22 @@ void auton::skills() {}
 
 // ============================= Match Routines ============================= //
 
+void noauton() { return; }
+
 /**
  * Do the left side roller
  */
 void left_roller() {
-	chassis->moveDistance(-0.5_ft);
-	auto_roller();
+	chassis->moveDistance(0.5_ft);
+	if (team == team_e::TEAM_RED) {
+		roller.move(127);
+	} else if (team == team_e::TEAM_BLUE) {
+		roller.move(-127);
+	}
+	pros::delay(1000);
+	roller.brake();
+
+	chassis->moveDistance(-0.75_ft);
 }
 
 /**
@@ -30,5 +40,6 @@ void right_roller() {
 // ============================ Routine Metadata ============================ //
 
 std::vector<Routine> auton::routines{
+    Routine(noauton, start_position_e::BOTH, "No routine"),
     Routine(left_roller, start_position_e::LEFT, "Do left side roller (Start on same tile)"),
     Routine(right_roller, start_position_e::RIGHT, "Do right side roller (Start on closest tile)")};
