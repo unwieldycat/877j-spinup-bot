@@ -9,6 +9,11 @@ void auton::skills() {}
 // ============================= Match Routines ============================= //
 
 /**
+ * For when our alliance partner has an infinitely better routine
+ */
+void do_nothing() {}
+
+/**
  * Win point routine
  */
 void solo_awp() {
@@ -53,6 +58,7 @@ void both_rollers_right() {
 // ============================ Routine Metadata ============================ //
 
 std::vector<Routine> auton::routines{
+    Routine(do_nothing, start_position_e::BOTH, "Do nothing"),
     Routine(solo_awp, start_position_e::LEFT, "Solo Autonomous Win Point"),
     Routine(preload, start_position_e::BOTH, "Push discs into low goal"),
     Routine(one_roller_right, start_position_e::RIGHT, "Set One Roller"),
