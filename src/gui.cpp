@@ -1,4 +1,5 @@
 #include "gui.hpp"
+#include "display/lv_core/lv_obj.h"
 #include "pros/misc.hpp"
 
 // ====================== Filesystem Driver Functions ====================== //
@@ -142,15 +143,6 @@ lv_res_t r_select_act(lv_obj_t *obj) {
 	int id = lv_obj_get_free_num(obj);
 	lv_obj_t *window = lv_obj_get_parent(obj);
 
-	// FIXME: Doesnt fetch object
-	/*
-	lv_obj_t *desc = lv_obj_get_child(window, NULL);
-
-	// Update description
-	auton::Routine sel_auton = auton::routines.at(id);
-	lv_label_set_text(desc, "u");
-	*/
-
 	selected_r_id = id;
 	std::cout << id << std::endl;
 	return LV_RES_OK;
@@ -177,20 +169,15 @@ auton::action_t gui::auton_selection() {
 	lv_win_set_title(select_win, "Autonomous Selection");
 	lv_obj_t *win_close_btn = lv_win_add_btn(select_win, SYMBOL_CLOSE, done_act);
 
-	// Description
-	lv_obj_t *desc = lv_label_create(select_win, NULL);
-	lv_label_set_text(desc, "No routine selected");
-	lv_obj_set_pos(desc, 272, 48);
-
 	// Title
 	lv_obj_t *title = lv_label_create(select_win, NULL);
 	lv_label_set_text(title, "Select autonomous routine");
-	lv_obj_align(title, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+	lv_obj_align(title, NULL, LV_ALIGN_IN_TOP_MID, 0, 4);
 
 	// Routines list
 	lv_obj_t *r_list = lv_list_create(select_win, NULL);
 	lv_obj_align(r_list, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 48);
-	lv_obj_set_size(r_list, 232, 130);
+	lv_obj_set_size(r_list, 458, 130);
 
 	// Add routines to list
 	for (auton::Routine r : auton::routines) {
