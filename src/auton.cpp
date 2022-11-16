@@ -61,7 +61,7 @@ std::vector<Routine> auton::routines{
     Routine(do_nothing, start_position_e::BOTH, "Do nothing"),
     Routine(solo_awp, start_position_e::LEFT, "Solo Autonomous Win Point"),
     Routine(preload, start_position_e::BOTH, "Push discs into low goal"),
-    Routine(one_roller_right, start_position_e::RIGHT, "Set One Roller"),
-    Routine(one_roller_left, start_position_e::LEFT, "Set One Roller"),
-    Routine(both_rollers_right, start_position_e::LEFT, "Set Both Rollers"),
-    Routine(both_rollers_left, start_position_e::RIGHT, "Set Both Rollers")};
+    Routine(one_roller_right, start_position_e::RIGHT, "Set One Roller (Right)"),
+    Routine(one_roller_left, start_position_e::LEFT, "Set One Roller (Left)"),
+    Routine(both_rollers_right, start_position_e::LEFT, "Set Both Rollers (Right)"),
+    Routine(both_rollers_left, start_position_e::RIGHT, "Set Both Rollers (Left)")};
