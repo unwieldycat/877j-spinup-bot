@@ -141,11 +141,15 @@ int selected_r_id;
 lv_res_t r_select_act(lv_obj_t *obj) {
 	int id = lv_obj_get_free_num(obj);
 	lv_obj_t *window = lv_obj_get_parent(obj);
+
+	// FIXME: Doesnt fetch object
+	/*
 	lv_obj_t *desc = lv_obj_get_child(window, NULL);
 
 	// Update description
 	auton::Routine sel_auton = auton::routines.at(id);
-	lv_label_set_text(desc, sel_auton.description.c_str());
+	lv_label_set_text(desc, "u");
+	*/
 
 	selected_r_id = id;
 	std::cout << id << std::endl;
