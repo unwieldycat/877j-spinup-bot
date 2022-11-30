@@ -99,3 +99,19 @@ void launch_control() {
 		pros::delay(20);
 	}
 }
+
+void roller_control() {
+	bool active = false;
+	while (true) {
+		if (controller.getDigital(okapi::ControllerDigital::L1)) {
+			roller.move(127);
+			active = true;
+		} else if (controller.getDigital(okapi::ControllerDigital::L2)) {
+			roller.move(-127);
+			active = true;
+		} else if (active) {
+			roller.move(0);
+			active = false;
+		}
+	}
+}
