@@ -16,7 +16,7 @@ okapi::Motor drive_fr(2);
 okapi::Motor drive_rl(3);
 okapi::Motor drive_rr(4);
 
-pros::Motor roller(5);
+pros::Motor expansion(5);
 pros::Motor launcher(6);
 pros::Motor intake(7);
 
@@ -37,14 +37,14 @@ void auto_roller() {
 	while (distance.get() < 50) {
 		int hue = optical.get_hue();
 
-		roller.move(127);
+		intake.move(127);
 		pros::delay(1000);
 
 		// If the optical sensor detects red then blue is
 		// selected and vice versa
 		if ((hue < 10 || hue > 350) && team == team_e::TEAM_BLUE ||
 		    (hue < 260 && hue > 190) && team == team_e::TEAM_RED) {
-			roller.brake();
+			intake.brake();
 			break;
 		}
 	}
@@ -97,5 +97,52 @@ void launch_control() {
 
 		// Wait before next loop to take load off CPU
 		pros::delay(20);
+	}
+}
+
+void roller_control() {
+	bool active = false;
+	while (true) {
+		if (controller.getDigital(okapi::ControllerDigital::L1)) {
+			intake.move(127);
+			active = true;
+		} else if (controller.getDigital(okapi::ControllerDigital::L2)) {
+			intake.move(-127);
+			active = true;
+		} else if (active) {
+			intake.move(0);
+			active = false;
+		}
+	}
+}
+
+void expand_control() {
+	int status = 0;
+	bool active = false;
+	bool debounce = false;
+	while (true) {
+		bool dig_x = controller.getDigital(okapi::ControllerDigital::X);
+		bool dig_b = controller.getDigital(okapi::ControllerDigital::B);
+
+		if (dig_x && status < 1 && !debounce) {
+			debounce = true;
+			status++;
+		} else if (dig_b && status > -1 && !debounce) {
+			debounce = true;
+			status--;
+		} else if (!dig_x && !dig_b && debounce) {
+			debounce = false;
+		}
+
+		if (status == 0 && active == true) {
+			expansion.move(0);
+			active = false;
+		} else if (status == -1 && active == false) {
+			expansion.move(-127);
+			active = true;
+		} else if (status == 1 && active == false) {
+			expansion.move(127);
+			active = true;
+		}
 	}
 }
