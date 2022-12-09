@@ -87,13 +87,18 @@ void launch_control() {
 	// Variable to record active state
 	bool active = false;
 	bool dig_A = controller.getDigital(okapi::ControllerDigital::A);
+	bool debounce = false;
 	while (true) {
-		if (dig_A && active == false) {
+		if (dig_A && active == false && !debounce) {
 			launcher.move(127);
+			debounce = true;
 			active = true;
-		} else if (dig_A && active == true) {
+		} else if (dig_A && active == true && !debounce) {
 			launcher.brake();
+			debounce = true;
 			active = false;
+		} else if (!dig_A && debounce) {
+			debounce = false;
 		}
 		// Wait before next loop to take load off CPU
 		pros::delay(20);
