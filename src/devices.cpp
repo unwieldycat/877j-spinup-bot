@@ -86,15 +86,15 @@ void drive_control() {
 void launch_control() {
 	// Variable to record active state
 	bool active = false;
+	bool dig_A = controller.getDigital(okapi::ControllerDigital::A);
 	while (true) {
-		if (controller.getDigital(okapi::ControllerDigital::A) && active == false) {
+		if (dig_A && active == false) {
 			launcher.move(127);
 			active = true;
-		} else if (active) {
+		} else if (dig_A && active == true) {
 			launcher.brake();
 			active = false;
 		}
-
 		// Wait before next loop to take load off CPU
 		pros::delay(20);
 	}
