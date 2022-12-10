@@ -104,7 +104,6 @@ void drive_control() {
 				drive_fr.moveVelocity((drive - strafe + turn) * 200);
 				drive_rl.moveVelocity((-drive + strafe + turn) * 200);
 				drive_rr.moveVelocity((drive + strafe + turn) * 200);
-
 			} else if (dir == 3) { // Drive left
 				drive_fl.moveVelocity((-drive - strafe + turn) * 200);
 				drive_fr.moveVelocity((-drive + strafe + turn) * 200);
