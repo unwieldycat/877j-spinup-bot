@@ -190,10 +190,10 @@ void expand_control() {
 			expansion.move(0);
 			active = false;
 		} else if (status == -1 && active == false) {
-			expansion.move(-64);
+			expansion.move(-96);
 			active = true;
 		} else if (status == 1 && active == false) {
-			expansion.move(64);
+			expansion.move(96);
 			active = true;
 		}
 	}
