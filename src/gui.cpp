@@ -264,6 +264,7 @@ void gui::game() {
 
 	// Actions
 	lv_obj_t *actions_list = lv_list_create(lv_scr_act(), NULL);
+	lv_obj_set_size(actions_list, 128, 130);
 	lv_obj_align(actions_list, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -8, -8);
 
 	lv_obj_t *team_sel_btn = lv_list_add(actions_list, NULL, "Team selection", abtn_action);
