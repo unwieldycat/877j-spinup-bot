@@ -86,7 +86,7 @@ void drive_control() {
 		}
 
 		// Check against deadzone
-		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05 || -0.05 < strafe > 0.05) {
+		if (-0.1 < turn > 0.1 || -0.1 < drive > 0.1 || -0.1 < strafe > 0.1) {
 			// Move motors
 
 			if (dir == 0) { // Drive forward
