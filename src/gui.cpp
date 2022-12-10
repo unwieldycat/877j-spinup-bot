@@ -241,7 +241,37 @@ char *get_mode_as_c_str() {
 	}
 }
 
-void gui::game() {}
+lv_res_t abtn_action(lv_obj_t *obj) {
+	int act_num = lv_obj_get_free_num(obj);
+
+	switch (act_num) {
+	case 0:
+		gui::team_selection();
+		break;
+	case 1:
+		gui::auton_selection();
+		break;
+	}
+
+	return LV_RES_OK;
+}
+
+void gui::game() {
+	// Game mode label
+	lv_obj_t *mode_label = lv_label_create(lv_scr_act(), NULL);
+	lv_obj_align(mode_label, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 8, -8);
+	lv_label_set_text(mode_label, "");
+
+	// Actions
+	lv_obj_t *actions_list = lv_list_create(lv_scr_act(), NULL);
+	lv_obj_align(actions_list, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -8, -8);
+
+	lv_obj_t *team_sel_btn = lv_list_add(actions_list, NULL, "Team selection", abtn_action);
+	lv_obj_set_free_num(team_sel_btn, 0);
+
+	lv_obj_t *auton_sel_btn = lv_list_add(actions_list, NULL, "Auton selection", abtn_action);
+	lv_obj_set_free_num(auton_sel_btn, 1);
+}
 
 // ================================ Methods ================================ //
 
@@ -263,4 +293,6 @@ void gui::init() {
 		lv_label_set_text(error_label, "Error: SD card is not installed!");
 		lv_obj_align(error_label, NULL, LV_ALIGN_IN_TOP_MID, 0, 8);
 	}
+
+	gui::game();
 }
