@@ -17,7 +17,7 @@ okapi::Motor drive_rl(3);
 okapi::Motor drive_rr(4);
 
 pros::Motor expansion(5);
-pros::Motor launcher(6);
+pros::Motor launcher(6, true);
 pros::Motor intake(7);
 
 // Chassis
@@ -53,19 +53,64 @@ void auto_roller() {
 void drive_control() {
 	// Variable to record robot state
 	bool active = false;
+
+	// Direction switch stuffs
+	bool dirsw_debounce = false;
+	int dir = 0;
+
 	while (true) {
 		// Get inputs from controller
 		float turn = controller.getAnalog(okapi::ControllerAnalog::rightX);
 		float drive = controller.getAnalog(okapi::ControllerAnalog::leftY);
 		float strafe = controller.getAnalog(okapi::ControllerAnalog::leftX);
 
+		// TODO: make this less gross
+		if (controller.getDigital(okapi::ControllerDigital::up) && !dirsw_debounce) { // Front
+			dir = 0;
+			controller.setText(0, 0, "Front set to Front");
+			dirsw_debounce = true;
+		} else if (controller.getDigital(okapi::ControllerDigital::right) && !dirsw_debounce) { // Right
+			dir = 1;
+			controller.setText(0, 0, "Right set to Front");
+			dirsw_debounce = true;
+		} else if (controller.getDigital(okapi::ControllerDigital::down) && !dirsw_debounce) { // Back
+			dir = 2;
+			controller.setText(0, 0, "Back set to Front");
+			dirsw_debounce = true;
+		} else if (controller.getDigital(okapi::ControllerDigital::left) && !dirsw_debounce) { // Left
+			dir = 3;
+			controller.setText(0, 0, "Left set to Front");
+			dirsw_debounce = true;
+		} else {
+			dirsw_debounce = false;
+		}
+
 		// Check against deadzone
 		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05 || -0.05 < strafe > 0.05) {
 			// Move motors
-			drive_fl.moveVelocity((drive + strafe + turn) * 200);
-			drive_fr.moveVelocity((-drive + strafe + turn) * 200);
-			drive_rl.moveVelocity((drive - strafe + turn) * 200);
-			drive_rr.moveVelocity((-drive - strafe + turn) * 200);
+
+			if (dir == 0) { // Drive forward
+				drive_fl.moveVelocity((drive + strafe + turn) * 200);
+				drive_fr.moveVelocity((-drive + strafe + turn) * 200);
+				drive_rl.moveVelocity((drive - strafe + turn) * 200);
+				drive_rr.moveVelocity((-drive - strafe + turn) * 200);
+			} else if (dir == 1) { // Drive right
+				drive_fl.moveVelocity((-drive - strafe + turn) * 200);
+				drive_fr.moveVelocity((-drive + strafe + turn) * 200);
+				drive_rl.moveVelocity((drive - strafe + turn) * 200);
+				drive_rr.moveVelocity((drive + strafe + turn) * 200);
+			} else if (dir == 2) { // Drive backward
+				drive_fl.moveVelocity((-drive - strafe + turn) * 200);
+				drive_fr.moveVelocity((drive - strafe + turn) * 200);
+				drive_rl.moveVelocity((-drive + strafe + turn) * 200);
+				drive_rr.moveVelocity((drive + strafe + turn) * 200);
+
+			} else if (dir == 3) { // Drive left
+				drive_fl.moveVelocity((drive + strafe + turn) * 200);
+				drive_fr.moveVelocity((drive - strafe + turn) * 200);
+				drive_rl.moveVelocity((-drive - strafe + turn) * 200);
+				drive_rr.moveVelocity((-drive + strafe + turn) * 200);
+			}
 
 			active = true;
 		} else if (active == true) { // If in deadzone check if active
@@ -86,18 +131,21 @@ void drive_control() {
 void launch_control() {
 	// Variable to record active state
 	bool active = false;
-	bool dig_A = controller.getDigital(okapi::ControllerDigital::A);
 	bool debounce = false;
 	while (true) {
-		if (dig_A && active == false && !debounce) {
+		bool btn_a = controller.getDigital(okapi::ControllerDigital::A);
+
+		if (btn_a && !active && !debounce) {
 			launcher.move(127);
 			debounce = true;
 			active = true;
-		} else if (dig_A && active == true && !debounce) {
+			debounce = true;
+		} else if (btn_a && active && !debounce) {
 			launcher.brake();
 			debounce = true;
 			active = false;
-		} else if (!dig_A && debounce) {
+			debounce = true;
+		} else if (!btn_a && debounce) {
 			debounce = false;
 		}
 		// Wait before next loop to take load off CPU
@@ -143,10 +191,10 @@ void expand_control() {
 			expansion.move(0);
 			active = false;
 		} else if (status == -1 && active == false) {
-			expansion.move(-127);
+			expansion.move(-64);
 			active = true;
 		} else if (status == 1 && active == false) {
-			expansion.move(127);
+			expansion.move(64);
 			active = true;
 		}
 	}
