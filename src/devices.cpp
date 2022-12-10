@@ -137,16 +137,17 @@ void launch_control() {
 
 		if (btn_a && !active && !debounce) {
 			launcher.move(127);
+			debounce = true;
 			active = true;
 			debounce = true;
 		} else if (btn_a && active && !debounce) {
 			launcher.brake();
+			debounce = true;
 			active = false;
 			debounce = true;
 		} else if (!btn_a && debounce) {
 			debounce = false;
 		}
-
 		// Wait before next loop to take load off CPU
 		pros::delay(20);
 	}

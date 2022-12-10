@@ -29,8 +29,11 @@ void solo_awp() {
 void preload() { chassis->driveToPoint({2_ft, 0_ft}); }
 
 // TODO: Simple roller routines
-void one_roller_left() {}
-void one_roller_right() {}
+void one_roller_left() { auto_roller(); }
+void one_roller_right() {
+	chassis->driveToPoint({-1_ft, 0_ft});
+	auto_roller();
+}
 
 /**
  * Do both rollers and ignore discs (starting from left)
