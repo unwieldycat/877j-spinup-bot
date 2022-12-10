@@ -19,6 +19,7 @@ okapi::Motor drive_rr(4);
 pros::Motor expansion(5);
 pros::Motor launcher(6, true);
 pros::Motor intake(7);
+pros::Motor pusher(8);
 
 // Chassis
 std::shared_ptr<okapi::OdomChassisController> chassis =
@@ -195,6 +196,21 @@ void expand_control() {
 		} else if (status == 1 && active == false) {
 			expansion.move(96);
 			active = true;
+		}
+	}
+}
+
+void manual_push() {
+	bool debounce = false;
+	bool dig_y = controller.getDigital(okapi::ControllerDigital::Y);
+	while (true) {
+		if (dig_y && !debounce) {
+			pusher.move_relative(360, 100);
+			pusher.brake();
+			debounce = true;
+
+		} else if (!dig_y && debounce) {
+			debounce = false;
 		}
 	}
 }
