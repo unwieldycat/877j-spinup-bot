@@ -17,7 +17,7 @@ okapi::Motor drive_rl(3);
 okapi::Motor drive_rr(4);
 
 pros::Motor expansion(5);
-pros::Motor launcher(6);
+pros::Motor launcher(6, true);
 pros::Motor intake(7);
 
 // Chassis
@@ -86,13 +86,20 @@ void drive_control() {
 void launch_control() {
 	// Variable to record active state
 	bool active = false;
+	bool debounce = false;
 	while (true) {
-		if (controller.getDigital(okapi::ControllerDigital::A) && !active) {
+		bool btn_a = controller.getDigital(okapi::ControllerDigital::A);
+
+		if (btn_a && !active && !debounce) {
 			launcher.move(127);
 			active = true;
-		} else if (controller.getDigital(okapi::ControllerDigital::A) && active) {
+			debounce = true;
+		} else if (btn_a && active && !debounce) {
 			launcher.brake();
 			active = false;
+			debounce = true;
+		} else if (!btn_a && debounce) {
+			debounce = false;
 		}
 
 		// Wait before next loop to take load off CPU
