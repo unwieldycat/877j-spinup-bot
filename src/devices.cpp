@@ -53,19 +53,64 @@ void auto_roller() {
 void drive_control() {
 	// Variable to record robot state
 	bool active = false;
+
+	// Direction switch stuffs
+	bool dirsw_debounce = false;
+	int dir = 0;
+
 	while (true) {
 		// Get inputs from controller
 		float turn = controller.getAnalog(okapi::ControllerAnalog::rightX);
 		float drive = controller.getAnalog(okapi::ControllerAnalog::leftY);
 		float strafe = controller.getAnalog(okapi::ControllerAnalog::leftX);
 
+		// TODO: make this less gross
+		if (controller.getDigital(okapi::ControllerDigital::up) && !dirsw_debounce) { // Front
+			dir = 0;
+			controller.setText(0, 0, "Front set to Front");
+			dirsw_debounce = true;
+		} else if (controller.getDigital(okapi::ControllerDigital::right) && !dirsw_debounce) { // Right
+			dir = 1;
+			controller.setText(0, 0, "Right set to Front");
+			dirsw_debounce = true;
+		} else if (controller.getDigital(okapi::ControllerDigital::down) && !dirsw_debounce) { // Back
+			dir = 2;
+			controller.setText(0, 0, "Back set to Front");
+			dirsw_debounce = true;
+		} else if (controller.getDigital(okapi::ControllerDigital::left) && !dirsw_debounce) { // Left
+			dir = 3;
+			controller.setText(0, 0, "Left set to Front");
+			dirsw_debounce = true;
+		} else {
+			dirsw_debounce = false;
+		}
+
 		// Check against deadzone
 		if (-0.05 < turn > 0.05 || -0.05 < drive > 0.05 || -0.05 < strafe > 0.05) {
 			// Move motors
-			drive_fl.moveVelocity((drive + strafe + turn) * 200);
-			drive_fr.moveVelocity((-drive + strafe + turn) * 200);
-			drive_rl.moveVelocity((drive - strafe + turn) * 200);
-			drive_rr.moveVelocity((-drive - strafe + turn) * 200);
+
+			if (dir == 0) { // Drive forward
+				drive_fl.moveVelocity((drive + strafe + turn) * 200);
+				drive_fr.moveVelocity((-drive + strafe + turn) * 200);
+				drive_rl.moveVelocity((drive - strafe + turn) * 200);
+				drive_rr.moveVelocity((-drive - strafe + turn) * 200);
+			} else if (dir == 1) { // Drive right
+				drive_fl.moveVelocity((-drive - strafe + turn) * 200);
+				drive_fr.moveVelocity((-drive + strafe + turn) * 200);
+				drive_rl.moveVelocity((drive - strafe + turn) * 200);
+				drive_rr.moveVelocity((drive + strafe + turn) * 200);
+			} else if (dir == 2) { // Drive backward
+				drive_fl.moveVelocity((-drive - strafe + turn) * 200);
+				drive_fr.moveVelocity((drive - strafe + turn) * 200);
+				drive_rl.moveVelocity((-drive + strafe + turn) * 200);
+				drive_rr.moveVelocity((drive + strafe + turn) * 200);
+
+			} else if (dir == 3) { // Drive left
+				drive_fl.moveVelocity((drive + strafe + turn) * 200);
+				drive_fr.moveVelocity((drive - strafe + turn) * 200);
+				drive_rl.moveVelocity((-drive - strafe + turn) * 200);
+				drive_rr.moveVelocity((-drive + strafe + turn) * 200);
+			}
 
 			active = true;
 		} else if (active == true) { // If in deadzone check if active
