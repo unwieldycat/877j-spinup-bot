@@ -30,3 +30,4 @@ extern void roller_control(void);
 extern void drive_control(void);
 extern void launch_control(void);
 extern void expand_control(void);
+extern void manual_push(void);

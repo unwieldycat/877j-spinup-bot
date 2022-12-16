@@ -27,4 +27,5 @@ void opcontrol() {
 	pros::Task launch_task(launch_control);
 	pros::Task roller_task(roller_control);
 	pros::Task expansion_task(expand_control);
+	pros::Task indexer_task(manual_push);
 }
