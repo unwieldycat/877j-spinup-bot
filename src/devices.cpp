@@ -18,8 +18,8 @@ okapi::Motor drive_rr(4);
 
 pros::Motor expansion(5);
 pros::Motor launcher(6, true);
-pros::Motor intake(7);
-pros::Motor pusher(8);
+pros::Motor intake(7, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
+pros::Motor pusher(8, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
 
 // Chassis
 std::shared_ptr<okapi::OdomChassisController> chassis =
@@ -202,11 +202,11 @@ void expand_control() {
 
 void manual_push() {
 	bool debounce = false;
-	bool dig_y = controller.getDigital(okapi::ControllerDigital::Y);
+	pusher.set_encoder_units(pros::motor_encoder_units_e::E_MOTOR_ENCODER_DEGREES);
 	while (true) {
+		bool dig_y = controller.getDigital(okapi::ControllerDigital::Y);
 		if (dig_y && !debounce) {
 			pusher.move_relative(360, 100);
-			pusher.brake();
 			debounce = true;
 
 		} else if (!dig_y && debounce) {
