@@ -20,7 +20,7 @@ void competition_initialize() {
 
 void disabled() {}
 
-void autonomous() {}
+void autonomous() { auton_routine(); }
 
 void opcontrol() {
 	pros::Task drive_task(drive_control);
