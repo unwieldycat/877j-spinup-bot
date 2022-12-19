@@ -12,9 +12,9 @@ pros::Optical optical(10);
 
 // Motors
 okapi::Motor drive_fl(1);
-okapi::Motor drive_fr(2);
+okapi::Motor drive_fr(-2);
 okapi::Motor drive_rl(3);
-okapi::Motor drive_rr(4);
+okapi::Motor drive_rr(-4);
 
 pros::Motor expansion(5);
 pros::Motor launcher(6, true);
@@ -66,18 +66,34 @@ void drive_control() {
 		// TODO: make this less gross
 		if (controller.getDigital(okapi::ControllerDigital::up) && !dirsw_debounce) { // Front
 			dir = 0;
+			drive_fl.setReversed(false);
+			drive_fr.setReversed(true);
+			drive_rl.setReversed(false);
+			drive_rr.setReversed(true);
 			controller.setText(0, 0, "Front set to Front");
 			dirsw_debounce = true;
 		} else if (controller.getDigital(okapi::ControllerDigital::right) && !dirsw_debounce) { // Right
 			dir = 1;
+			drive_fl.setReversed(false);
+			drive_fr.setReversed(false);
+			drive_rl.setReversed(true);
+			drive_rr.setReversed(true);
 			controller.setText(0, 0, "Right set to Front");
 			dirsw_debounce = true;
 		} else if (controller.getDigital(okapi::ControllerDigital::down) && !dirsw_debounce) { // Back
 			dir = 2;
+			drive_fl.setReversed(true);
+			drive_fr.setReversed(false);
+			drive_rl.setReversed(true);
+			drive_rr.setReversed(false);
 			controller.setText(0, 0, "Back set to Front");
 			dirsw_debounce = true;
 		} else if (controller.getDigital(okapi::ControllerDigital::left) && !dirsw_debounce) { // Left
 			dir = 3;
+			drive_fl.setReversed(true);
+			drive_fr.setReversed(true);
+			drive_rl.setReversed(false);
+			drive_rr.setReversed(false);
 			controller.setText(0, 0, "Left set to Front");
 			dirsw_debounce = true;
 		} else {
@@ -89,22 +105,22 @@ void drive_control() {
 			// Move motors
 			if (dir == 0) { // Drive forward
 				drive_fl.moveVelocity((drive + strafe + turn) * 200);
-				drive_fr.moveVelocity((-drive + strafe + turn) * 200);
+				drive_fr.moveVelocity((drive + strafe + turn) * 200);
 				drive_rl.moveVelocity((drive - strafe + turn) * 200);
-				drive_rr.moveVelocity((-drive - strafe + turn) * 200);
+				drive_rr.moveVelocity((drive - strafe + turn) * 200);
 			} else if (dir == 1) { // Drive right
 				drive_fl.moveVelocity((drive - strafe + turn) * 200);
 				drive_fr.moveVelocity((drive + strafe + turn) * 200);
-				drive_rl.moveVelocity((-drive - strafe + turn) * 200);
-				drive_rr.moveVelocity((-drive + strafe + turn) * 200);
+				drive_rl.moveVelocity((drive - strafe + turn) * 200);
+				drive_rr.moveVelocity((drive + strafe + turn) * 200);
 			} else if (dir == 2) { // Drive backward
-				drive_fl.moveVelocity((-drive - strafe + turn) * 200);
+				drive_fl.moveVelocity((drive - strafe + turn) * 200);
 				drive_fr.moveVelocity((drive - strafe + turn) * 200);
-				drive_rl.moveVelocity((-drive + strafe + turn) * 200);
+				drive_rl.moveVelocity((drive + strafe + turn) * 200);
 				drive_rr.moveVelocity((drive + strafe + turn) * 200);
 			} else if (dir == 3) { // Drive left
-				drive_fl.moveVelocity((-drive + strafe + turn) * 200);
-				drive_fr.moveVelocity((-drive - strafe + turn) * 200);
+				drive_fl.moveVelocity((drive + strafe + turn) * 200);
+				drive_fr.moveVelocity((drive - strafe + turn) * 200);
 				drive_rl.moveVelocity((drive + strafe + turn) * 200);
 				drive_rr.moveVelocity((drive - strafe + turn) * 200);
 			}
