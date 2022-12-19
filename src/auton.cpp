@@ -27,10 +27,14 @@ void solo_awp() {
 /**
  * Only push discs into low goal
  */
-void preload() { chassis->driveToPoint({2_ft, 0_ft}); }
+void preload() { chassis->moveDistance(-2_ft); }
 
 // TODO: Simple roller routines
-void one_roller_left() { auto_roller(); }
+void one_roller_left() {
+	intake.set_encoder_units(pros::motor_encoder_units_e::E_MOTOR_ENCODER_DEGREES);
+	chassis->driveToPoint({0_ft, 0.5_ft});
+	intake.move_absolute(180, 100);
+}
 void one_roller_right() {
 	chassis->driveToPoint({-1_ft, 0_ft});
 	auto_roller();
@@ -42,6 +46,7 @@ void one_roller_right() {
 void both_rollers_left() {
 	auto_roller();
 	chassis->driveToPoint({-5_ft, -5_ft});
+
 	chassis->turnToAngle(-90_deg);
 	chassis->driveToPoint({-11_ft, -11_ft});
 	auto_roller();
