@@ -25,9 +25,7 @@ pros::Motor pusher(8, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
 std::shared_ptr<okapi::OdomChassisController> chassis =
     okapi::ChassisControllerBuilder()
         .withMotors(drive_fl, drive_fr, drive_rr, drive_rl)
-        .withDimensions(
-            okapi::AbstractMotor::gearset::green, {{4_in, 11.5_in}, okapi::imev5GreenTPR}
-        )
+        .withDimensions(okapi::AbstractMotor::gearset::green, {{4_in, 13_in}, okapi::imev5GreenTPR})
         .withOdometry()
         .buildOdometry();
 
@@ -87,9 +85,8 @@ void drive_control() {
 		}
 
 		// Check against deadzone
-		if (-0.1 < turn > 0.1 || -0.1 < drive > 0.1 || -0.1 < strafe > 0.1) {
+		if (-0.5 < turn > 0.5 || -0.5 < drive > 0.5 || -0.5 < strafe > 0.5) {
 			// Move motors
-
 			if (dir == 0) { // Drive forward
 				drive_fl.moveVelocity((drive + strafe + turn) * 200);
 				drive_fr.moveVelocity((-drive + strafe + turn) * 200);
@@ -136,7 +133,7 @@ void launch_control() {
 		bool btn_a = controller.getDigital(okapi::ControllerDigital::A);
 
 		if (btn_a && !active && !debounce) {
-			launcher.move(127);
+			launcher.move(116);
 			debounce = true;
 			active = true;
 			debounce = true;
