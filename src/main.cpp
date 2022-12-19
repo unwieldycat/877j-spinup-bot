@@ -20,9 +20,19 @@ void competition_initialize() {
 
 void disabled() {}
 
-void autonomous() { auton_routine(); }
+void autonomous() {
+	// Reset motor directionality in event of change
+	drive_fl.setReversed(false);
+	drive_fr.setReversed(true);
+	drive_rl.setReversed(false);
+	drive_rr.setReversed(true);
+
+	// Run auton routine
+	auton_routine();
+}
 
 void opcontrol() {
+	// Drive control tasks
 	pros::Task drive_task(drive_control);
 	pros::Task launch_task(launch_control);
 	pros::Task roller_task(roller_control);
