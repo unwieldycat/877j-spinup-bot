@@ -117,7 +117,6 @@ void both_rollers_left() {
  */
 void both_rollers_right() {
 	intake.set_encoder_units(pros::motor_encoder_units_e::E_MOTOR_ENCODER_DEGREES);
-	pusher.set_encoder_units(pros::motor_encoder_units_e::E_MOTOR_ENCODER_DEGREES);
 	chassis->driveToPoint({-2_ft, 0.5_ft});
 	intake.move_relative(180, 100);
 	chassis->driveToPoint({4_ft, -4_ft}); 
