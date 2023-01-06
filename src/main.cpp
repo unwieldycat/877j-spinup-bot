@@ -21,12 +21,6 @@ void competition_initialize() {
 void disabled() {}
 
 void autonomous() {
-	// Reset motor directionality in event of change
-	drive_fl.setReversed(false);
-	drive_fr.setReversed(true);
-	drive_rl.setReversed(false);
-	drive_rr.setReversed(true);
-
 	// Run auton routine
 	auton_routine();
 }

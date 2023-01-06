@@ -1,33 +1,26 @@
 #include "devices.hpp"
 #include "pros/distance.hpp"
+#include "pros/misc.h"
 
 // ================================ Devices ================================ //
 
 // Inputs
-okapi::Controller controller(okapi::ControllerId::master);
+pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Sensors
 pros::Distance distance(9);
 pros::Optical optical(10);
 
 // Motors
-okapi::Motor drive_fl(1);
-okapi::Motor drive_fr(-2);
-okapi::Motor drive_rl(3);
-okapi::Motor drive_rr(-4);
+pros::Motor drive_fl(1, true);
+pros::Motor drive_fr(2);
+pros::Motor drive_rl(3, true);
+pros::Motor drive_rr(4);
 
 pros::Motor expansion(5);
 pros::Motor launcher(6, true);
 pros::Motor intake(7, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
 pros::Motor pusher(8, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
-
-// Chassis
-std::shared_ptr<okapi::OdomChassisController> chassis =
-    okapi::ChassisControllerBuilder()
-        .withMotors(drive_fl, drive_fr, drive_rr, drive_rl)
-        .withDimensions(okapi::AbstractMotor::gearset::green, {{4_in, 13_in}, okapi::imev5GreenTPR})
-        .withOdometry()
-        .buildOdometry();
 
 // ============================ Device functions ============================ //
 
@@ -59,42 +52,42 @@ void drive_control() {
 
 	while (true) {
 		// Get inputs from controller
-		float turn = controller.getAnalog(okapi::ControllerAnalog::rightX);
-		float drive = controller.getAnalog(okapi::ControllerAnalog::leftY);
-		float strafe = controller.getAnalog(okapi::ControllerAnalog::leftX);
+		float turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+		float drive = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+		float strafe = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
 
 		// TODO: make this less gross
-		if (controller.getDigital(okapi::ControllerDigital::up) && !dirsw_debounce) { // Front
+		if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP) && !dirsw_debounce) { // Front
 			dir = 0;
-			drive_fl.setReversed(false);
-			drive_fr.setReversed(true);
-			drive_rl.setReversed(false);
-			drive_rr.setReversed(true);
-			controller.setText(0, 0, "Front set to Front");
+			drive_fl.set_reversed(false);
+			drive_fr.set_reversed(true);
+			drive_rl.set_reversed(false);
+			drive_rr.set_reversed(true);
+			controller.set_text(0, 0, "Front set to Front");
 			dirsw_debounce = true;
-		} else if (controller.getDigital(okapi::ControllerDigital::right) && !dirsw_debounce) { // Right
+		} else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) && !dirsw_debounce) { // Right
 			dir = 1;
-			drive_fl.setReversed(false);
-			drive_fr.setReversed(false);
-			drive_rl.setReversed(true);
-			drive_rr.setReversed(true);
-			controller.setText(0, 0, "Right set to Front");
+			drive_fl.set_reversed(false);
+			drive_fr.set_reversed(false);
+			drive_rl.set_reversed(true);
+			drive_rr.set_reversed(true);
+			controller.set_text(0, 0, "Right set to Front");
 			dirsw_debounce = true;
-		} else if (controller.getDigital(okapi::ControllerDigital::down) && !dirsw_debounce) { // Back
+		} else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) && !dirsw_debounce) { // Back
 			dir = 2;
-			drive_fl.setReversed(true);
-			drive_fr.setReversed(false);
-			drive_rl.setReversed(true);
-			drive_rr.setReversed(false);
-			controller.setText(0, 0, "Back set to Front");
+			drive_fl.set_reversed(true);
+			drive_fr.set_reversed(false);
+			drive_rl.set_reversed(true);
+			drive_rr.set_reversed(false);
+			controller.set_text(0, 0, "Back set to Front");
 			dirsw_debounce = true;
-		} else if (controller.getDigital(okapi::ControllerDigital::left) && !dirsw_debounce) { // Left
+		} else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT) && !dirsw_debounce) { // Left
 			dir = 3;
-			drive_fl.setReversed(true);
-			drive_fr.setReversed(true);
-			drive_rl.setReversed(false);
-			drive_rr.setReversed(false);
-			controller.setText(0, 0, "Left set to Front");
+			drive_fl.set_reversed(true);
+			drive_fr.set_reversed(true);
+			drive_rl.set_reversed(false);
+			drive_rr.set_reversed(false);
+			controller.set_text(0, 0, "Left set to Front");
 			dirsw_debounce = true;
 		} else {
 			dirsw_debounce = false;
@@ -104,34 +97,34 @@ void drive_control() {
 		if (-0.5 < turn > 0.5 || -0.5 < drive > 0.5 || -0.5 < strafe > 0.5) {
 			// Move motors
 			if (dir == 0) { // Drive forward
-				drive_fl.moveVelocity((drive + strafe + turn) * 200);
-				drive_fr.moveVelocity((drive - strafe - turn) * 200);
-				drive_rl.moveVelocity((drive - strafe + turn) * 200);
-				drive_rr.moveVelocity((drive + strafe - turn) * 200);
+				drive_fl.move_velocity((drive + strafe + turn) * 200);
+				drive_fr.move_velocity((drive - strafe - turn) * 200);
+				drive_rl.move_velocity((drive - strafe + turn) * 200);
+				drive_rr.move_velocity((drive + strafe - turn) * 200);
 			} else if (dir == 1) { // Drive right
-				drive_fl.moveVelocity((drive - strafe + turn) * 200);
-				drive_fr.moveVelocity((drive + strafe + turn) * 200);
-				drive_rl.moveVelocity((drive + strafe - turn) * 200);
-				drive_rr.moveVelocity((drive - strafe - turn) * 200);
+				drive_fl.move_velocity((drive - strafe + turn) * 200);
+				drive_fr.move_velocity((drive + strafe + turn) * 200);
+				drive_rl.move_velocity((drive + strafe - turn) * 200);
+				drive_rr.move_velocity((drive - strafe - turn) * 200);
 			} else if (dir == 2) { // Drive backward
-				drive_fl.moveVelocity((drive + strafe - turn) * 200);
-				drive_fr.moveVelocity((drive - strafe + turn) * 200);
-				drive_rl.moveVelocity((drive - strafe - turn) * 200);
-				drive_rr.moveVelocity((drive + strafe + turn) * 200);
+				drive_fl.move_velocity((drive + strafe - turn) * 200);
+				drive_fr.move_velocity((drive - strafe + turn) * 200);
+				drive_rl.move_velocity((drive - strafe - turn) * 200);
+				drive_rr.move_velocity((drive + strafe + turn) * 200);
 			} else if (dir == 3) { // Drive left
-				drive_fl.moveVelocity((drive - strafe - turn) * 200);
-				drive_fr.moveVelocity((drive + strafe - turn) * 200);
-				drive_rl.moveVelocity((drive + strafe + turn) * 200);
-				drive_rr.moveVelocity((drive - strafe + turn) * 200);
+				drive_fl.move_velocity((drive - strafe - turn) * 200);
+				drive_fr.move_velocity((drive + strafe - turn) * 200);
+				drive_rl.move_velocity((drive + strafe + turn) * 200);
+				drive_rr.move_velocity((drive - strafe + turn) * 200);
 			}
 
 			active = true;
 		} else if (active == true) { // If in deadzone check if active
 			// Stop all motors
-			drive_fl.moveVelocity(0);
-			drive_fr.moveVelocity(0);
-			drive_rl.moveVelocity(0);
-			drive_rr.moveVelocity(0);
+			drive_fl.move_velocity(0);
+			drive_fr.move_velocity(0);
+			drive_rl.move_velocity(0);
+			drive_rr.move_velocity(0);
 
 			active = false;
 		}
@@ -146,16 +139,14 @@ void launch_control() {
 	bool active = false;
 	bool debounce = false;
 	while (true) {
-		bool btn_a = controller.getDigital(okapi::ControllerDigital::A);
+		bool btn_a = controller.get_digital(pros::E_CONTROLLER_DIGITAL_A);
 
 		if (btn_a && !active && !debounce) {
 			launcher.move(116);
-			debounce = true;
 			active = true;
 			debounce = true;
 		} else if (btn_a && active && !debounce) {
 			launcher.brake();
-			debounce = true;
 			active = false;
 			debounce = true;
 		} else if (!btn_a && debounce) {
@@ -169,10 +160,10 @@ void launch_control() {
 void roller_control() {
 	bool active = false;
 	while (true) {
-		if (controller.getDigital(okapi::ControllerDigital::L1)) {
+		if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
 			intake.move(127);
 			active = true;
-		} else if (controller.getDigital(okapi::ControllerDigital::L2)) {
+		} else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
 			intake.move(-127);
 			active = true;
 		} else if (active) {
@@ -187,8 +178,8 @@ void expand_control() {
 	bool active = false;
 	bool debounce = false;
 	while (true) {
-		bool dig_x = controller.getDigital(okapi::ControllerDigital::X);
-		bool dig_b = controller.getDigital(okapi::ControllerDigital::B);
+		bool dig_x = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
+		bool dig_b = controller.get_digital(pros::E_CONTROLLER_DIGITAL_B);
 
 		if (dig_x && status < 1 && !debounce) {
 			debounce = true;
@@ -217,7 +208,7 @@ void manual_push() {
 	bool debounce = false;
 	pusher.set_encoder_units(pros::motor_encoder_units_e::E_MOTOR_ENCODER_DEGREES);
 	while (true) {
-		bool dig_y = controller.getDigital(okapi::ControllerDigital::Y);
+		bool dig_y = controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y);
 		if (dig_y && !debounce) {
 			pusher.move_relative(360, 100);
 			debounce = true;
