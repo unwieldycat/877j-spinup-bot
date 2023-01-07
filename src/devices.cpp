@@ -31,6 +31,7 @@ void drive_distance(int dist) {
 	int derivative;
 	int total_error;
 
+	// Convert distance (feet) to motor rotations (degrees)
 	const int end_pos = (12 * 180 * dist) / (WHEEL_RADIUS * cos(45) * PI);
 	int avg_pos;
 
