@@ -6,7 +6,7 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Sensors
-pros::Distance distance(9);
+pros::Imu inertial(9);
 
 // Motors
 pros::Motor drive_fl(1, true);
@@ -57,7 +57,40 @@ void drive_distance(int dist) {
 
 		// Assign previous error to error calculated here
 		error_prev = error;
-		pros::delay(20); // Rest between loops to prevetn crashing
+		pros::delay(20); // Rest between loops to prevent crashing
+	}
+}
+
+void turn(int desired_hdg) {
+	int error;
+	int error_prev;
+	int derivative;
+	int total_error;
+
+	int hdg_current;
+
+	while (hdg_current < desired_hdg) {
+		// Average motor positions
+		hdg_current = inertial.get_heading();
+
+		error = hdg_current - desired_hdg; // Proportional
+		total_error += error;              // Integral
+		derivative = error - error_prev;   // Derivative
+
+		// Integral failsafe
+		if (error == 0 || abs(error) > 40) total_error = 0;
+
+		// Calculate motor speed and move motors
+		double motor_pwr = (error * KP) + (total_error * KI) + (derivative * KD);
+
+		drive_fl.move_velocity(motor_pwr);
+		drive_fr.move_velocity(motor_pwr);
+		drive_rl.move_velocity(motor_pwr);
+		drive_rr.move_velocity(motor_pwr);
+
+		// Assign previous error to error calculated here
+		error_prev = error;
+		pros::delay(20); // Rest between loops to prevent crashing
 	}
 }
 

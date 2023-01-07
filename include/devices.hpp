@@ -33,6 +33,7 @@ extern pros::Motor pusher;
 
 // Chassis functions
 extern void drive_distance(int dist);
+extern void turn(int desired_hdg);
 
 // Other functions
 extern void auto_roller(void);
