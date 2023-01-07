@@ -22,6 +22,9 @@ pros::Motor pusher(8, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
 
 // ================================= Chassis ================================= //
 
+// Great resource on creating and tuning a PID loop
+// https://smithcsrobot.weebly.com/uploads/6/0/9/5/60954939/pid_control_document.pdf
+
 void drive_distance(int dist) {
 	int error;
 	int error_prev;
@@ -32,6 +35,29 @@ void drive_distance(int dist) {
 	int avg_pos;
 
 	while (avg_pos < end_pos) {
+		// Average motor positions
+		avg_pos = (drive_fl.get_position() + drive_fr.get_position() + drive_rl.get_position() +
+		           drive_rr.get_position()) /
+		          4;
+
+		error = avg_pos - end_pos;       // Proportional
+		total_error += error;            // Integral
+		derivative = error - error_prev; // Derivative
+
+		// Integral failsafe
+		if (error == 0 || abs(error) > 40) total_error = 0;
+
+		// Calculate motor speed and move motors
+		double motor_pwr = (error * KP) + (total_error * KI) + (derivative * KD);
+
+		drive_fl.move_velocity(motor_pwr);
+		drive_fr.move_velocity(motor_pwr);
+		drive_rl.move_velocity(motor_pwr);
+		drive_rr.move_velocity(motor_pwr);
+
+		// Assign previous error to error calculated here
+		error_prev = error;
+		pros::delay(20); // Rest between loops to prevetn crashing
 	}
 }
 

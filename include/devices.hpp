@@ -1,5 +1,11 @@
 #pragma once
 
+// TODO: Tune PID
+
+#define KP 0.5
+#define KI 0.2
+#define KD 0.1
+
 #define CHASSIS_WIDTH
 #define WHEEL_RADIUS 2.5
 
