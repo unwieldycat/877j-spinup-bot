@@ -24,6 +24,8 @@ pros::Motor pusher(8, pros::E_MOTOR_GEARSET_36);
 // Great resource on creating and tuning a PID loop
 // https://smithcsrobot.weebly.com/uploads/6/0/9/5/60954939/pid_control_document.pdf
 
+// FIXME: These functions should have relative movement
+
 void drive_distance(int dist) {
 	int error;
 	int error_prev;
