@@ -16,7 +16,7 @@ pros::Motor drive_rr(4);
 
 pros::Motor expansion(5);
 pros::Motor launcher(6, true);
-pros::Motor intake(7, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
+pros::Motor roller(7, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
 pros::Motor pusher(8, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
 
 // ================================= Chassis ================================= //
@@ -215,13 +215,13 @@ void roller_control() {
 	bool active = false;
 	while (true) {
 		if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-			intake.move(127);
+			roller.move(127);
 			active = true;
 		} else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			intake.move(-127);
+			roller.move(-127);
 			active = true;
 		} else if (active) {
-			intake.move(0);
+			roller.move(0);
 			active = false;
 		}
 	}
