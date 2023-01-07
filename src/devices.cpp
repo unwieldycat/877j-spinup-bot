@@ -1,6 +1,4 @@
 #include "devices.hpp"
-#include "pros/distance.hpp"
-#include "pros/misc.h"
 
 // ================================ Devices ================================ //
 
@@ -21,6 +19,21 @@ pros::Motor expansion(5);
 pros::Motor launcher(6, true);
 pros::Motor intake(7, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
 pros::Motor pusher(8, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
+
+// ================================= Chassis ================================= //
+
+void drive_distance(int dist) {
+	int error;
+	int error_prev;
+	int derivative;
+	int total_error;
+
+	const int end_pos = (12 * 180 * dist) / (WHEEL_RADIUS * cos(45) * PI);
+	int avg_pos;
+
+	while (avg_pos < end_pos) {
+	}
+}
 
 // ============================ Device functions ============================ //
 

@@ -1,5 +1,8 @@
 #pragma once
 
+#define CHASSIS_WIDTH
+#define WHEEL_RADIUS 2.5
+
 #include "main.hpp"
 
 // =========================== Device Definitions =========================== //
@@ -22,7 +25,10 @@ extern pros::Motor launcher;
 extern pros::Motor intake;
 extern pros::Motor pusher;
 
-// Functions
+// Chassis functions
+extern void drive_distance(int dist);
+
+// Other functions
 extern void auto_roller(void);
 extern void roller_control(void);
 extern void drive_control(void);
