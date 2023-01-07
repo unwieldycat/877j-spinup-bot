@@ -215,10 +215,10 @@ void roller_control() {
 	bool active = false;
 	while (true) {
 		if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-			roller.move(127);
+			roller.move(85);
 			active = true;
 		} else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-			roller.move(-127);
+			roller.move(-85);
 			active = true;
 		} else if (active) {
 			roller.move(0);
