@@ -9,15 +9,15 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 pros::Imu inertial(9);
 
 // Motors
-pros::Motor drive_fl(1, true);
-pros::Motor drive_fr(2);
-pros::Motor drive_rl(3, true);
-pros::Motor drive_rr(4);
+pros::Motor drive_fl(1, pros::E_MOTOR_GEARSET_18, true);
+pros::Motor drive_fr(2, pros::E_MOTOR_GEARSET_18);
+pros::Motor drive_rl(3, pros::E_MOTOR_GEARSET_18, true);
+pros::Motor drive_rr(4, pros::E_MOTOR_GEARSET_18);
 
 pros::Motor expansion(5);
 pros::Motor launcher(6, true);
-pros::Motor roller(7, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
-pros::Motor pusher(8, pros::motor_gearset_e_t::E_MOTOR_GEARSET_36);
+pros::Motor roller(7, pros::E_MOTOR_GEARSET_36);
+pros::Motor pusher(8, pros::E_MOTOR_GEARSET_36);
 
 // ================================= Chassis ================================= //
 
