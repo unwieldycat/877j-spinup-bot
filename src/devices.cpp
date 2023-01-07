@@ -7,7 +7,6 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Sensors
 pros::Distance distance(9);
-pros::Optical optical(10);
 
 // Motors
 pros::Motor drive_fl(1, true);
@@ -63,24 +62,6 @@ void drive_distance(int dist) {
 }
 
 // ============================ Device functions ============================ //
-
-void auto_roller() {
-	// FIXME: Just doesnt work properly 👍
-	while (distance.get() < 50) {
-		int hue = optical.get_hue();
-
-		intake.move(127);
-		pros::delay(1000);
-
-		// If the optical sensor detects red then blue is
-		// selected and vice versa
-		if ((hue < 10 || hue > 350) && team == team_e::TEAM_BLUE ||
-		    (hue < 260 && hue > 190) && team == team_e::TEAM_RED) {
-			intake.brake();
-			break;
-		}
-	}
-}
 
 void drive_control() {
 	// Variable to record robot state
