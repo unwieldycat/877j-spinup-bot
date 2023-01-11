@@ -1,5 +1,6 @@
 #pragma once
 
+#include "auton.hpp"
 #include "main.hpp"
 
 // ============================ GUI Definitions ============================ //
@@ -16,14 +17,14 @@ void init();
  *
  * Returns auton selected by user
  */
-void auton_selection();
+auton::action_t auton_selection();
 
 /**
  * Open team selection UI
  *
  * Returns int
  */
-void team_selection();
+int team_selection();
 
 /**
  * Show game UI
