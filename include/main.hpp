@@ -4,6 +4,7 @@
 
 // Libraries
 #include "api.h"
+#include "auton.hpp"
 #include <functional>
 #include <iostream>
 #include <math.h>
@@ -13,6 +14,7 @@ enum team_e { TEAM_NEUTRAL = 0, TEAM_RED = 1, TEAM_BLUE = 2 };
 
 // Globals
 extern int team;
+extern auton::action_t auton_routine;
 
 // Function prototypes
 extern "C" {

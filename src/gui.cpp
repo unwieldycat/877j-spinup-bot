@@ -1,6 +1,4 @@
 #include "gui.hpp"
-#include "display/lv_core/lv_obj.h"
-#include "pros/misc.hpp"
 
 // ====================== Filesystem Driver Functions ====================== //
 
@@ -68,7 +66,7 @@ lv_res_t t_select_act(lv_obj_t *obj) {
 	return LV_RES_OK;
 }
 
-int gui::team_selection() {
+void gui::team_selection() {
 	// Style to remove padding from window background
 	lv_style_t win_style;
 	lv_style_copy(&win_style, &lv_style_transp);
@@ -131,7 +129,7 @@ int gui::team_selection() {
 	lv_obj_del(team_win);
 
 	// Return team id
-	return selected_t;
+	team = selected_t;
 }
 
 // ========================= Auton Selector Window ========================= //
@@ -156,7 +154,7 @@ lv_res_t done_act(lv_obj_t *obj) {
 	return LV_RES_OK;
 }
 
-auton::action_t gui::auton_selection() {
+void gui::auton_selection() {
 	// Style to remove padding from window background
 	lv_style_t win_style;
 	lv_style_copy(&win_style, &lv_style_transp);
@@ -219,9 +217,9 @@ auton::action_t gui::auton_selection() {
 	lv_obj_del(select_win);
 
 	// Return selected routine
-	if (selected_r_id == -1) return auton::skills;
+	if (selected_r_id == -1) auton_routine = auton::skills;
 	auton::Routine routine = auton::routines.at(selected_r_id);
-	return routine.action;
+	auton_routine = routine.action;
 }
 
 // ================================ Game UI ================================ //
