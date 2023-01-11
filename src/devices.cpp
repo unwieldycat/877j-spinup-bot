@@ -34,7 +34,7 @@ void drive_distance(int dist) {
 
 	// Convert distance (feet) to motor rotations (degrees)
 	const int end_pos = (12 * 180 * dist) / (WHEEL_RADIUS * cos(45) * PI);
-	int avg_pos;
+	int avg_pos = 0;
 
 	while (avg_pos < end_pos) {
 		// Average motor positions
@@ -69,7 +69,7 @@ void turn(int desired_hdg) {
 	int derivative;
 	int total_error;
 
-	int hdg_current;
+	int hdg_current = 0;
 
 	while (hdg_current < desired_hdg) {
 		// Average motor positions
