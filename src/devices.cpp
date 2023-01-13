@@ -27,19 +27,32 @@ pros::Motor pusher(8, pros::E_MOTOR_GEARSET_36);
 // FIXME: These functions should have relative movement
 
 void drive_distance(int dist) {
-	int error;
-	int error_prev;
-	int derivative;
-	int total_error;
+	double error = 0;
+	double error_prev = 0;
+	double derivative = 0;
+	double total_error = 0;
+
+	drive_fl.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
+	drive_fr.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
+	drive_rl.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
+	drive_rr.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
 
 	// Convert distance (feet) to motor rotations (degrees)
-	const int end_pos = (12 * 180 * dist) / (WHEEL_RADIUS * cos(45) * PI);
-	int avg_pos = 0;
+
+	const double end_pos = (0.7071067812 * dist / (WHEEL_DIAMETER / 2)) / (2 * PI);
+	double avg_pos = 0;
+
+	drive_fl.set_zero_position(drive_fl.get_position());
+	drive_fr.set_zero_position(drive_fl.get_position());
+	drive_rl.set_zero_position(drive_fl.get_position());
+	drive_rr.set_zero_position(drive_fl.get_position());
+
+	std::cout << end_pos << std::endl;
 
 	while (avg_pos < end_pos) {
 		// Average motor positions
-		avg_pos = (drive_fl.get_position() + drive_fr.get_position() + drive_rl.get_position() +
-		           drive_rr.get_position()) /
+		avg_pos = -(drive_fl.get_position() + drive_fr.get_position() + drive_rl.get_position() +
+		            drive_rr.get_position()) /
 		          4;
 
 		error = avg_pos - end_pos;       // Proportional
@@ -50,7 +63,7 @@ void drive_distance(int dist) {
 		if (error == 0 || abs(error) > 40) total_error = 0;
 
 		// Calculate motor speed and move motors
-		double motor_pwr = (error * KP) + (total_error * KI) + (derivative * KD);
+		double motor_pwr = (error * 10) + (total_error * 10) + (derivative * 10);
 
 		drive_fl.move_velocity(motor_pwr);
 		drive_fr.move_velocity(motor_pwr);
@@ -83,7 +96,7 @@ void turn(int desired_hdg) {
 		if (error == 0 || abs(error) > 40) total_error = 0;
 
 		// Calculate motor speed and move motors
-		double motor_pwr = (error * KP) + (total_error * KI) + (derivative * KD);
+		double motor_pwr = (error * 1) + (total_error * 1) + (derivative * 1);
 
 		drive_fl.move_velocity(motor_pwr);
 		drive_fr.move_velocity(motor_pwr);
