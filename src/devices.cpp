@@ -1,4 +1,5 @@
 #include "devices.hpp"
+#include "pros/adi.hpp"
 
 // ================================ Devices ================================ //
 
@@ -19,6 +20,8 @@ pros::Motor launcher(6, true);
 pros::Motor roller(7, pros::E_MOTOR_GEARSET_36);
 pros::Motor pusher(8, pros::E_MOTOR_GEARSET_36);
 
+pros::Rotation rotation(11);
+
 // ================================= Chassis ================================= //
 
 // Great resource on creating and tuning a PID loop
@@ -37,25 +40,25 @@ void drive_distance(int dist) {
 	drive_rl.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
 	drive_rr.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
 
-	// Convert distance (feet) to motor rotations (degrees)
+	// Convert distance (inches) to motor rotations (degrees)
+	const double end_pos = (dist / (WHEEL_DIAMETER / 2)) / (2 * PI);
 
-	const double end_pos = (0.7071067812 * dist / (WHEEL_DIAMETER / 2)) / (2 * PI);
-	double avg_pos = 0;
+	const double start_hdg = inertial.get_heading();
+	double hdg_error;
+	double pos = 0;
 
-	drive_fl.set_zero_position(drive_fl.get_position());
-	drive_fr.set_zero_position(drive_fl.get_position());
-	drive_rl.set_zero_position(drive_fl.get_position());
-	drive_rr.set_zero_position(drive_fl.get_position());
+	rotation.reset_position();
 
-	std::cout << end_pos << std::endl;
+	while (pos < end_pos) {
+		hdg_error = inertial.get_heading();
+		std::cout << error << std::endl;
 
-	while (avg_pos < end_pos) {
-		// Average motor positions
-		avg_pos = -(drive_fl.get_position() + drive_fr.get_position() + drive_rl.get_position() +
-		            drive_rr.get_position()) /
-		          4;
+		// Rotary encoder position
+		pos = (double)rotation.get_position() / 100 / 360;
 
-		error = avg_pos - end_pos;       // Proportional
+		std::cout << pos << std::endl;
+
+		error = pos - end_pos;           // Proportional
 		total_error += error;            // Integral
 		derivative = error - error_prev; // Derivative
 
@@ -65,6 +68,7 @@ void drive_distance(int dist) {
 		// Calculate motor speed and move motors
 		double motor_pwr = (error * 10) + (total_error * 10) + (derivative * 10);
 
+		// Power motors
 		drive_fl.move_velocity(motor_pwr);
 		drive_fr.move_velocity(motor_pwr);
 		drive_rl.move_velocity(motor_pwr);
