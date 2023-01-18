@@ -9,7 +9,17 @@ auton::action_t auton_routine;
 
 // ============================= Initalization ============================= //
 
-void initialize() { gui::init(); }
+void initialize() {
+	std::cout << "[INFO] Initializing GUI" << std::endl;
+	gui::init();
+
+	// Reset inertial or else it'll return "inf"
+	std::cout << "[INFO] Calibrating inertial" << std::endl;
+	inertial.reset();
+	while (inertial.is_calibrating())
+		pros::delay(500);
+	std::cout << "[INFO] Inertial calibrated" << std::endl;
+}
 
 void competition_initialize() {
 	team = gui::team_selection();
@@ -26,7 +36,7 @@ void autonomous() {
 }
 
 void opcontrol() {
-	// Drive control tasks
+	//  Drive control tasks
 	pros::Task drive_task(drive_control);
 	pros::Task launch_task(launch_control);
 	pros::Task roller_task(roller_control);
