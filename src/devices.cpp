@@ -20,18 +20,30 @@ pros::Motor launcher(6, true);
 pros::Motor roller(7, pros::E_MOTOR_GEARSET_36);
 pros::Motor pusher(8, pros::E_MOTOR_GEARSET_36);
 
-pros::Rotation rotation(11);
+pros::Rotation rotation_long(11);
+pros::Rotation rotation_lat(12);
 
 // ================================= Chassis ================================= //
 
 // Great resource on creating and tuning a PID loop
 // https://smithcsrobot.weebly.com/uploads/6/0/9/5/60954939/pid_control_document.pdf
 
-void drive_distance(int dist) {
+/**
+ * Drive a given distance
+ *
+ * \param dist Distance in inches
+ * \param strafe Whether to move sideways (forward is right)
+ */
+void drive_distance(int dist, bool strafe) {
 	double error = 0;
 	double error_prev = 0;
 	double derivative = 0;
 	double total_error = 0;
+
+	// Proxy the rotary encoder
+	pros::Rotation *rotation = (strafe) ? &rotation_lat : &rotation_long;
+	rotation->reset_position();
+	rotation->set_reversed(false);
 
 	inertial.set_heading(0);
 	drive_fl.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
@@ -46,17 +58,16 @@ void drive_distance(int dist) {
 	double hdg_error;
 	double pos = 0;
 
-	rotation.reset_position();
+	rotation->reset_position();
 
 	while (pos < end_pos) {
 		hdg = inertial.get_heading();
-		if (hdg > 360) hdg = 0; // Solves "inf" heading
 
 		// Calculate heading error
-		hdg_error = (hdg > 180) ? hdg_error = hdg - 360 : hdg_error = hdg;
+		hdg_error = (double)(hdg > 180) ? hdg_error = hdg - 360 : hdg_error = hdg;
 
 		// Rotary encoder position
-		pos = (double)rotation.get_position() / 100 / 360;
+		pos = (double)rotation->get_position() / 100 / 360;
 
 		error = pos - end_pos;           // Proportional
 		total_error += error;            // Integral
@@ -66,7 +77,7 @@ void drive_distance(int dist) {
 		if (error == 0 || abs(error) > 40) total_error = 0;
 
 		// Calculate motor speed and move motors
-		double motor_pwr = (error * 10) + (total_error * 10) + (derivative * 10);
+		double motor_pwr = (error * 0.5) + (total_error * 0.5) + (derivative * 0.5);
 		double hdg_correction = hdg_error * 0.5;
 
 		// Power motors
@@ -80,12 +91,13 @@ void drive_distance(int dist) {
 		pros::delay(20); // Rest between loops to prevent crashing
 	}
 
-	drive_fl.move(0);
-	drive_fl.move(0);
-	drive_fl.move(0);
-	drive_fl.move(0);
+	drive_fl.brake();
+	drive_fr.brake();
+	drive_rl.brake();
+	drive_rr.brake();
 }
 
+// FIXME: Fix error calculations
 void turn(int desired_hdg) {
 	int error;
 	int error_prev;
@@ -93,11 +105,10 @@ void turn(int desired_hdg) {
 	int total_error;
 
 	inertial.set_heading(0);
-	int hdg = 0;
+	double hdg = 0;
 
 	while (hdg < desired_hdg) {
 		hdg = inertial.get_heading();
-		if (hdg > 360) hdg = 0; // Solves "inf" heading
 
 		error = hdg - desired_hdg;       // Proportional
 		total_error += error;            // Integral
@@ -107,7 +118,7 @@ void turn(int desired_hdg) {
 		if (error == 0 || abs(error) > 40) total_error = 0;
 
 		// Calculate motor speed and move motors
-		double motor_pwr = (error * 1) + (total_error * 1) + (derivative * 1);
+		double motor_pwr = (error * 0.5) + (total_error * 0.5) + (derivative * 0.5);
 
 		drive_fl.move_velocity(-motor_pwr);
 		drive_fr.move_velocity(motor_pwr);
@@ -119,10 +130,10 @@ void turn(int desired_hdg) {
 		pros::delay(20); // Rest between loops to prevent crashing
 	}
 
-	drive_fl.move(0);
-	drive_fl.move(0);
-	drive_fl.move(0);
-	drive_fl.move(0);
+	drive_fl.brake();
+	drive_fr.brake();
+	drive_rl.brake();
+	drive_rr.brake();
 }
 
 // ============================ Device functions ============================ //

@@ -11,8 +11,7 @@
 extern pros::Controller controller;
 
 // Sensors
-extern pros::Distance distance;
-extern pros::Optical optical;
+extern pros::Imu inertial;
 
 // Motors
 extern pros::Motor drive_fl;
@@ -20,13 +19,16 @@ extern pros::Motor drive_fr;
 extern pros::Motor drive_rl;
 extern pros::Motor drive_rr;
 
-extern pros::Motor roller;
+extern pros::Motor expansion;
 extern pros::Motor launcher;
-extern pros::Motor intake;
+extern pros::Motor roller;
 extern pros::Motor pusher;
 
+extern pros::Rotation rotation_long;
+extern pros::Rotation rotation_lat;
+
 // Chassis functions
-extern void drive_distance(int dist);
+extern void drive_distance(int dist, bool strafe = false);
 extern void turn(int desired_hdg);
 
 // Other functions
