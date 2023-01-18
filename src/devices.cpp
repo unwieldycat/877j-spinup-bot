@@ -27,14 +27,13 @@ pros::Rotation rotation(11);
 // Great resource on creating and tuning a PID loop
 // https://smithcsrobot.weebly.com/uploads/6/0/9/5/60954939/pid_control_document.pdf
 
-// FIXME: These functions should have relative movement
-
 void drive_distance(int dist) {
 	double error = 0;
 	double error_prev = 0;
 	double derivative = 0;
 	double total_error = 0;
 
+	inertial.set_heading(0);
 	drive_fl.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
 	drive_fr.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
 	drive_rl.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
@@ -43,20 +42,21 @@ void drive_distance(int dist) {
 	// Convert distance (inches) to motor rotations (degrees)
 	const double end_pos = (dist / (WHEEL_DIAMETER / 2)) / (2 * PI);
 
-	const double start_hdg = inertial.get_heading();
+	double hdg = 0;
 	double hdg_error;
 	double pos = 0;
 
 	rotation.reset_position();
 
 	while (pos < end_pos) {
-		hdg_error = inertial.get_heading();
-		std::cout << error << std::endl;
+		hdg = inertial.get_heading();
+		if (hdg > 360) hdg = 0; // Solves "inf" heading
+
+		// Calculate heading error
+		hdg_error = (hdg > 180) ? hdg_error = hdg - 360 : hdg_error = hdg;
 
 		// Rotary encoder position
 		pos = (double)rotation.get_position() / 100 / 360;
-
-		std::cout << pos << std::endl;
 
 		error = pos - end_pos;           // Proportional
 		total_error += error;            // Integral
@@ -67,17 +67,23 @@ void drive_distance(int dist) {
 
 		// Calculate motor speed and move motors
 		double motor_pwr = (error * 10) + (total_error * 10) + (derivative * 10);
+		double hdg_correction = hdg_error * 0.5;
 
 		// Power motors
-		drive_fl.move_velocity(motor_pwr);
-		drive_fr.move_velocity(motor_pwr);
-		drive_rl.move_velocity(motor_pwr);
-		drive_rr.move_velocity(motor_pwr);
+		drive_fl.move_velocity(motor_pwr - hdg_correction);
+		drive_fr.move_velocity(motor_pwr + hdg_correction);
+		drive_rl.move_velocity(motor_pwr - hdg_correction);
+		drive_rr.move_velocity(motor_pwr + hdg_correction);
 
 		// Assign previous error to error calculated here
 		error_prev = error;
 		pros::delay(20); // Rest between loops to prevent crashing
 	}
+
+	drive_fl.move(0);
+	drive_fl.move(0);
+	drive_fl.move(0);
+	drive_fl.move(0);
 }
 
 void turn(int desired_hdg) {
@@ -86,15 +92,16 @@ void turn(int desired_hdg) {
 	int derivative;
 	int total_error;
 
-	int hdg_current = 0;
+	inertial.set_heading(0);
+	int hdg = 0;
 
-	while (hdg_current < desired_hdg) {
-		// Average motor positions
-		hdg_current = inertial.get_heading();
+	while (hdg < desired_hdg) {
+		hdg = inertial.get_heading();
+		if (hdg > 360) hdg = 0; // Solves "inf" heading
 
-		error = hdg_current - desired_hdg; // Proportional
-		total_error += error;              // Integral
-		derivative = error - error_prev;   // Derivative
+		error = hdg - desired_hdg;       // Proportional
+		total_error += error;            // Integral
+		derivative = error - error_prev; // Derivative
 
 		// Integral failsafe
 		if (error == 0 || abs(error) > 40) total_error = 0;
@@ -102,15 +109,20 @@ void turn(int desired_hdg) {
 		// Calculate motor speed and move motors
 		double motor_pwr = (error * 1) + (total_error * 1) + (derivative * 1);
 
-		drive_fl.move_velocity(motor_pwr);
+		drive_fl.move_velocity(-motor_pwr);
 		drive_fr.move_velocity(motor_pwr);
-		drive_rl.move_velocity(motor_pwr);
+		drive_rl.move_velocity(-motor_pwr);
 		drive_rr.move_velocity(motor_pwr);
 
 		// Assign previous error to error calculated here
 		error_prev = error;
 		pros::delay(20); // Rest between loops to prevent crashing
 	}
+
+	drive_fl.move(0);
+	drive_fl.move(0);
+	drive_fl.move(0);
+	drive_fl.move(0);
 }
 
 // ============================ Device functions ============================ //
