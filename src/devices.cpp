@@ -97,7 +97,6 @@ void drive_distance(int dist, bool strafe) {
 	drive_rr.brake();
 }
 
-// FIXME: Fix error calculations
 void turn(int desired_hdg) {
 	int error;
 	int error_prev;
@@ -110,7 +109,9 @@ void turn(int desired_hdg) {
 	while (hdg < desired_hdg) {
 		hdg = inertial.get_heading();
 
-		error = hdg - desired_hdg;       // Proportional
+		error = hdg + desired_hdg; // Proportional
+		if (error < 0) error += 360;
+
 		total_error += error;            // Integral
 		derivative = error - error_prev; // Derivative
 
@@ -119,11 +120,12 @@ void turn(int desired_hdg) {
 
 		// Calculate motor speed and move motors
 		double motor_pwr = (error * 0.5) + (total_error * 0.5) + (derivative * 0.5);
+		int dir = (hdg > 180) ? -1 : 1;
 
-		drive_fl.move_velocity(-motor_pwr);
-		drive_fr.move_velocity(motor_pwr);
-		drive_rl.move_velocity(-motor_pwr);
-		drive_rr.move_velocity(motor_pwr);
+		drive_fl.move_velocity(dir * -motor_pwr);
+		drive_fr.move_velocity(dir * motor_pwr);
+		drive_rl.move_velocity(dir * -motor_pwr);
+		drive_rr.move_velocity(dir * motor_pwr);
 
 		// Assign previous error to error calculated here
 		error_prev = error;
