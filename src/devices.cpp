@@ -28,12 +28,6 @@ pros::Rotation rotation_lat(12);
 // Great resource on creating and tuning a PID loop
 // https://smithcsrobot.weebly.com/uploads/6/0/9/5/60954939/pid_control_document.pdf
 
-/**
- * Drive a given distance
- *
- * \param dist Distance in inches
- * \param strafe Whether to move sideways (forward is right)
- */
 void drive_distance(int dist, bool strafe) {
 	double error = 0;
 	double error_prev = 0;

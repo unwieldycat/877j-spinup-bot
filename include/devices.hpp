@@ -28,7 +28,19 @@ extern pros::Rotation rotation_long;
 extern pros::Rotation rotation_lat;
 
 // Chassis functions
+/**
+ * Drive a given distance
+ *
+ * \param dist Distance in inches
+ * \param strafe Whether to move sideways (forward is right)
+ */
 extern void drive_distance(int dist, bool strafe = false);
+
+/**
+ * Turn a certain angle
+ *
+ * \param desired_hdg angle to turn
+ */
 extern void turn(int desired_hdg);
 
 // Other functions
