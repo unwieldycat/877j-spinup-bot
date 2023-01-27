@@ -1,5 +1,6 @@
 #include "devices.hpp"
 #include "pros/adi.hpp"
+#include "pros/rtos.hpp"
 
 // ================================ Devices ================================ //
 
@@ -266,32 +267,16 @@ void roller_control() {
 }
 
 void expand_control() {
-	int status = 0;
-	bool active = false;
-	bool debounce = false;
 	while (true) {
 		bool dig_x = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
-		bool dig_b = controller.get_digital(pros::E_CONTROLLER_DIGITAL_B);
-
-		if (dig_x && status < 1 && !debounce) {
-			debounce = true;
-			status++;
-		} else if (dig_b && status > -1 && !debounce) {
-			debounce = true;
-			status--;
-		} else if (!dig_x && !dig_b && debounce) {
-			debounce = false;
-		}
-
-		if (status == 0 && active == true) {
-			expansion.move(0);
-			active = false;
-		} else if (status == -1 && active == false) {
-			expansion.move(-96);
-			active = true;
-		} else if (status == 1 && active == false) {
-			expansion.move(96);
-			active = true;
+		if (dig_x){
+			pros::delay(3000);
+			if (dig_x){
+				expansion.move(127);
+				pros::delay(2000);
+				expansion.move(0);
+			}
+			
 		}
 	}
 }
