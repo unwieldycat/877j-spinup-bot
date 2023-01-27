@@ -133,6 +133,13 @@ void turn(int desired_hdg) {
 	drive_rr.brake();
 }
 
+void drive_power(int power){
+	drive_fl.move(power);
+	drive_fr.move(power);
+	drive_rl.move(power);
+	drive_rr.move(power);
+}
+
 // ============================ Device functions ============================ //
 
 void drive_control() {
