@@ -133,11 +133,18 @@ void turn(int desired_hdg) {
 	drive_rr.brake();
 }
 
-void drive_power(int power, bool strafe) {
+void drive_power(int power, int msecs, bool strafe) {
 	drive_fl.move(power);
 	drive_fr.move(strafe ? -power : power);
 	drive_rl.move(strafe ? -power : power);
 	drive_rr.move(power);
+
+	pros::delay(msecs);
+
+	drive_fl.brake();
+	drive_fr.brake();
+	drive_rl.brake();
+	drive_rr.brake();
 }
 
 // ============================ Device functions ============================ //
