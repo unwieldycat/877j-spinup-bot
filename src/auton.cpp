@@ -29,7 +29,7 @@ void one_roller_left() {
 	pros::delay(180);
 	roller.brake();
 
-	drive_power(64, 1000, true);
+	drive_power(64, 250, true);
 }
 
 void one_roller_right() {}
