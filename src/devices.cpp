@@ -133,10 +133,10 @@ void turn(int desired_hdg) {
 	drive_rr.brake();
 }
 
-void drive_power(int power) {
+void drive_power(int power, bool strafe) {
 	drive_fl.move(power);
-	drive_fr.move(power);
-	drive_rl.move(power);
+	drive_fr.move(strafe ? -power : power);
+	drive_rl.move(strafe ? -power : power);
 	drive_rr.move(power);
 }
 
@@ -279,7 +279,7 @@ void expand_control() {
 			controller.rumble("-");
 			pros::delay(1500);
 			if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-				expansion.move(127);
+				expansion.move(-127);
 				pros::delay(10000);
 				expansion.move(0);
 			}
