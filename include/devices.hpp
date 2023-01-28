@@ -43,7 +43,7 @@ extern void drive_distance(int dist, bool strafe = false);
  */
 extern void turn(int desired_hdg);
 
-extern void drive_power(int power, bool reverse);
+extern void drive_power(int power, bool strafe = false);
 
 // Other functions
 extern void auto_roller(void);
