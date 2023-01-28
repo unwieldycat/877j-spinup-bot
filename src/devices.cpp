@@ -18,7 +18,7 @@ pros::Motor drive_rr(4, pros::E_MOTOR_GEARSET_18);
 
 pros::Motor expansion(5);
 pros::Motor launcher(6, true);
-pros::Motor roller(7, pros::E_MOTOR_GEARSET_36);
+pros::Motor roller(7, pros::E_MOTOR_GEARSET_36, true);
 pros::Motor pusher(8, pros::E_MOTOR_GEARSET_36);
 
 pros::Rotation rotation_long(11);
