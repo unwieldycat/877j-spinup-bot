@@ -133,7 +133,7 @@ void turn(int desired_hdg) {
 	drive_rr.brake();
 }
 
-void drive_power(int power){
+void drive_power(int power) {
 	drive_fl.move(power);
 	drive_fr.move(power);
 	drive_rl.move(power);
@@ -275,16 +275,17 @@ void roller_control() {
 
 void expand_control() {
 	while (true) {
-		bool dig_x = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
-		if (dig_x){
+		if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+			controller.rumble("-");
 			pros::delay(3000);
-			if (dig_x){
+			if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
 				expansion.move(127);
 				pros::delay(2000);
 				expansion.move(0);
 			}
-			
 		}
+
+		pros::delay(20);
 	}
 }
 
