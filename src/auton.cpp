@@ -26,7 +26,7 @@ void one_roller_left() {
 	drive_power(-64, 1000, true);
 
 	roller.move(-64);
-	pros::delay(250);
+	pros::delay(180);
 	roller.brake();
 
 	drive_power(64, 1000, true);
