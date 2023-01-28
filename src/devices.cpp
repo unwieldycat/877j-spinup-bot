@@ -92,7 +92,7 @@ void drive_distance(int dist, bool strafe) {
 }
 
 void turn(int desired_hdg) {
-	int error;
+	double error;
 	int error_prev;
 	int derivative;
 	int total_error;
@@ -100,11 +100,11 @@ void turn(int desired_hdg) {
 	inertial.set_heading(0);
 	double hdg = 0;
 
-	while (hdg < desired_hdg) {
+	while (true) {
 		hdg = inertial.get_heading();
 
-		error = hdg + desired_hdg; // Proportional
-		if (error < 0) error += 360;
+		error = desired_hdg - hdg;
+		if (abs(error) < 1) break;
 
 		total_error += error;            // Integral
 		derivative = error - error_prev; // Derivative
@@ -113,7 +113,7 @@ void turn(int desired_hdg) {
 		if (error == 0 || abs(error) > 40) total_error = 0;
 
 		// Calculate motor speed and move motors
-		double motor_pwr = (error * 0.5) + (total_error * 0.5) + (derivative * 0.5);
+		double motor_pwr = (error * 1) + (total_error * 0.5) + (derivative * 0.5);
 		int dir = (hdg > 180) ? -1 : 1;
 
 		drive_fl.move_velocity(dir * -motor_pwr);
