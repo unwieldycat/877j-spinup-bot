@@ -277,10 +277,10 @@ void expand_control() {
 	while (true) {
 		if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
 			controller.rumble("-");
-			pros::delay(3000);
+			pros::delay(1500);
 			if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
 				expansion.move(127);
-				pros::delay(2000);
+				pros::delay(10000);
 				expansion.move(0);
 			}
 		}
