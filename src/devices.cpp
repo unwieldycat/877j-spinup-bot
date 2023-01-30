@@ -102,12 +102,12 @@ void turn(int desired_hdg) {
 	inertial.set_heading(0);
 	double hdg = 0;
 
-	while (true) {
+	if (desired_hdg < 1) desired_hdg += 360;
+
+	while (abs(error) < 1) {
 		hdg = inertial.get_heading();
 
 		error = desired_hdg - hdg;
-		if (abs(error) < 1) break;
-
 		total_error += error;            // Integral
 		derivative = error - error_prev; // Derivative
 
