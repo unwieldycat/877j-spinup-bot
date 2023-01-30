@@ -302,7 +302,8 @@ void manual_push() {
 	while (true) {
 		bool dig_y = controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y);
 		if (dig_y && !debounce) {
-			pusher.move_relative(360, 100);
+			pusher.move_relative(30, 100);
+			pusher.move_relative(-30, 100);
 			debounce = true;
 
 		} else if (!dig_y && debounce) {
