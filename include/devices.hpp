@@ -34,7 +34,7 @@ extern pros::Rotation rotation_lat;
  * \param dist Distance in inches
  * \param strafe Whether to move sideways (forward is right)
  */
-extern void drive_distance(int dist, bool strafe = false);
+extern void drive_distance(double dist, bool strafe = false);
 
 /**
  * Turn a certain angle

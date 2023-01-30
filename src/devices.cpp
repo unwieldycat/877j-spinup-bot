@@ -30,7 +30,7 @@ pros::Rotation rotation_lat(12);
 // Great resource on creating and tuning a PID loop
 // https://smithcsrobot.weebly.com/uploads/6/0/9/5/60954939/pid_control_document.pdf
 
-void drive_distance(int dist, bool strafe) {
+void drive_distance(double dist, bool strafe) {
 	double error = 0;
 	double error_prev = 0;
 	double derivative = 0;
