@@ -20,13 +20,6 @@ void init();
 auton::action_t auton_selection();
 
 /**
- * Open team selection UI
- *
- * Returns int
- */
-int team_selection();
-
-/**
  * Show game UI
  */
 void game();

@@ -4,7 +4,6 @@
 
 // =============================== Variables ================================ //
 
-int team;
 auton::action_t auton_routine;
 
 // ============================= Initalization ============================= //
@@ -21,10 +20,7 @@ void initialize() {
 	std::cout << "[INFO] Inertial calibrated" << std::endl;
 }
 
-void competition_initialize() {
-	team = gui::team_selection();
-	auton_routine = gui::auton_selection();
-}
+void competition_initialize() { auton_routine = gui::auton_selection(); }
 
 // ============================== Main Methods ============================== //
 

@@ -56,84 +56,6 @@ static lv_fs_res_t fs_tell(void *file_p, uint32_t *pos_p) {
 	return LV_FS_RES_OK;
 }
 
-// ========================== Team Selector Window ========================== //
-
-int selected_t = 0;
-bool t_sel_done = false;
-
-lv_res_t t_select_act(lv_obj_t *obj) {
-	selected_t = lv_obj_get_free_num(obj);
-	t_sel_done = true;
-
-	return LV_RES_OK;
-}
-
-int gui::team_selection() {
-	// Style to remove padding from window background
-	lv_style_t win_style;
-	lv_style_copy(&win_style, &lv_style_transp);
-	win_style.body.padding.ver = 0;
-
-	// Create a window
-	lv_obj_t *team_win = lv_win_create(lv_scr_act(), NULL);
-	lv_win_set_style(team_win, LV_WIN_STYLE_CONTENT_BG, &win_style);
-	lv_win_set_btn_size(team_win, 12);
-	lv_win_set_title(team_win, "Team Selection");
-	lv_obj_t *win_close_btn = lv_win_add_btn(team_win, SYMBOL_CLOSE, t_select_act);
-	lv_obj_set_free_num(win_close_btn, 0);
-
-	// Title
-	lv_obj_t *title = lv_label_create(team_win, NULL);
-	lv_label_set_text(title, "Select team");
-	lv_obj_align(title, NULL, LV_ALIGN_IN_TOP_MID, 0, 0);
-
-	// Blue button style
-	lv_style_t blue_style;
-	lv_style_copy(&blue_style, lv_btn_get_style(win_close_btn, LV_BTN_STYLE_INA));
-	blue_style.body.border.color = LV_COLOR_BLUE;
-	blue_style.body.main_color = LV_COLOR_BLUE;
-	blue_style.body.grad_color = LV_COLOR_BLUE;
-
-	// Blue button
-	lv_obj_t *blue_btn = lv_btn_create(team_win, NULL);
-	lv_btn_set_style(blue_btn, LV_BTN_STYLE_REL, &blue_style);
-	lv_obj_align(blue_btn, NULL, LV_ALIGN_CENTER, -96, 128);
-	lv_obj_set_size(blue_btn, 128, 48);
-	lv_btn_set_action(blue_btn, LV_BTN_ACTION_CLICK, &t_select_act);
-	lv_obj_set_free_num(blue_btn, 1);
-	lv_obj_t *blue_label = lv_label_create(blue_btn, NULL);
-	lv_label_set_text(blue_label, "Blue");
-
-	// Red button style
-	lv_style_t red_style;
-	lv_style_copy(&red_style, lv_btn_get_style(win_close_btn, LV_BTN_STYLE_INA));
-	red_style.body.border.color = LV_COLOR_RED;
-	red_style.body.main_color = LV_COLOR_RED;
-	red_style.body.grad_color = LV_COLOR_RED;
-
-	// Red button
-	lv_obj_t *red_btn = lv_btn_create(team_win, NULL);
-	lv_btn_set_style(red_btn, LV_BTN_STYLE_REL, &red_style);
-	lv_obj_align(red_btn, NULL, LV_ALIGN_CENTER, 96, 82);
-	lv_obj_set_size(red_btn, 128, 48);
-	lv_btn_set_action(red_btn, LV_BTN_ACTION_CLICK, &t_select_act);
-	lv_obj_set_free_num(red_btn, 2);
-	lv_obj_t *red_label = lv_label_create(red_btn, NULL);
-	lv_label_set_text(red_label, "Red");
-
-	// Wait for user input or for match to start
-	while (!t_sel_done) {
-		if (pros::competition::is_connected() && !pros::competition::is_disabled()) break;
-		pros::delay(100);
-	}
-
-	// Close Window
-	lv_obj_del(team_win);
-
-	// Return team id
-	return selected_t;
-}
-
 // ========================= Auton Selector Window ========================= //
 
 int selected_r_id;
@@ -246,9 +168,6 @@ lv_res_t abtn_action(lv_obj_t *obj) {
 
 	switch (act_num) {
 	case 0:
-		gui::team_selection();
-		break;
-	case 1:
 		gui::auton_selection();
 		break;
 	}
@@ -267,11 +186,8 @@ void gui::game() {
 	lv_obj_set_size(actions_list, 128, 130);
 	lv_obj_align(actions_list, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -8, -8);
 
-	lv_obj_t *team_sel_btn = lv_list_add(actions_list, NULL, "Team selection", abtn_action);
-	lv_obj_set_free_num(team_sel_btn, 0);
-
 	lv_obj_t *auton_sel_btn = lv_list_add(actions_list, NULL, "Auton selection", abtn_action);
-	lv_obj_set_free_num(auton_sel_btn, 1);
+	lv_obj_set_free_num(auton_sel_btn, 0);
 }
 
 // ================================ Methods ================================ //
@@ -289,11 +205,7 @@ void gui::init() {
 	fs_driver.tell = fs_tell;
 	lv_fs_add_drv(&fs_driver);
 
-	if (!pros::usd::is_installed()) {
-		lv_obj_t *error_label = lv_label_create(lv_scr_act(), NULL);
-		lv_label_set_text(error_label, "Error: SD card is not installed!");
-		lv_obj_align(error_label, NULL, LV_ALIGN_IN_TOP_MID, 0, 8);
-	}
+	if (!pros::usd::is_installed()) std::cout << "[WARN]: No SD card installed" << std::endl;
 
 	gui::game();
 }
