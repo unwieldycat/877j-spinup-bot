@@ -181,6 +181,12 @@ void gui::game() {
 	lv_obj_align(mode_label, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 8, -8);
 	lv_label_set_text(mode_label, "");
 
+	// Image
+	lv_obj_t *logo = lv_img_create(lv_scr_act(), NULL);
+	lv_obj_set_size(logo, 128, 128);
+	lv_obj_align(logo, NULL, LV_ALIGN_IN_TOP_RIGHT, -8, 8);
+	lv_img_set_src(logo, "S:/logo.bin");
+
 	// Actions
 	lv_obj_t *actions_list = lv_list_create(lv_scr_act(), NULL);
 	lv_obj_set_size(actions_list, 128, 130);
