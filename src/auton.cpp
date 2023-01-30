@@ -21,7 +21,7 @@ void lowgoal() {
 	drive_power(-64, 2000);
 }
 
-// TODO: Simple roller routines
+// FIXME: Roller scores for other team
 void one_roller_left() {
 	drive_power(-64, 1000, true);
 
@@ -32,7 +32,17 @@ void one_roller_left() {
 	drive_power(64, 250, true);
 }
 
-void one_roller_right() {}
+void one_roller_right() {
+	drive_distance(24, true);
+
+	drive_power(-64, 1000, true);
+
+	roller.move(-64);
+	pros::delay(180);
+	roller.brake();
+
+	drive_power(64, 250, true);
+}
 
 // ============================ Routine Metadata ============================ //
 
