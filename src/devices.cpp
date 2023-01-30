@@ -21,6 +21,7 @@ pros::Motor launcher(6, true);
 pros::Motor roller(7, pros::E_MOTOR_GEARSET_36, true);
 pros::Motor pusher(8, pros::E_MOTOR_GEARSET_36);
 
+// Sensors
 pros::Rotation rotation_long(11);
 pros::Rotation rotation_lat(12);
 
@@ -74,12 +75,11 @@ void drive_distance(int dist, bool strafe) {
 		// Calculate motor speed and move motors
 		double motor_pwr = (error * 0.5) + (total_error * 0.5) + (derivative * 0.5);
 		double hdg_correction = hdg_error * 0.5;
-		double dir = (strafe) ? -1 : 1;
 
 		// Power motors
 		drive_fl.move_velocity(motor_pwr - hdg_correction);
-		drive_fr.move_velocity(dir * motor_pwr + hdg_correction);
-		drive_rl.move_velocity(dir * motor_pwr - hdg_correction);
+		drive_fr.move_velocity((strafe) ? -motor_pwr : motor_pwr + hdg_correction);
+		drive_rl.move_velocity((strafe) ? -motor_pwr : motor_pwr - hdg_correction);
 		drive_rr.move_velocity(motor_pwr + hdg_correction);
 
 		// Assign previous error to error calculated here
