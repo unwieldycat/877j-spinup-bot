@@ -194,6 +194,11 @@ void gui::game() {
 
 	lv_obj_t *auton_sel_btn = lv_list_add(actions_list, NULL, "Auton selection", abtn_action);
 	lv_obj_set_free_num(auton_sel_btn, 0);
+
+	while (true) {
+		lv_label_set_text(mode_label, get_mode_as_c_str());
+		pros::delay(500);
+	}
 }
 
 // ================================ Methods ================================ //
