@@ -208,7 +208,5 @@ void gui::init() {
 	fs_driver.tell = fs_tell;
 	lv_fs_add_drv(&fs_driver);
 
-	if (!pros::usd::is_installed()) std::cout << "[WARN]: No SD card installed" << std::endl;
-
-	gui::game();
+	if (!pros::usd::is_installed()) std::cout << "[WARN] No SD card installed" << std::endl;
 }
