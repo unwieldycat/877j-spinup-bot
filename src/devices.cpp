@@ -102,21 +102,22 @@ void turn(int desired_hdg) {
 	inertial.set_heading(0);
 	double hdg = 0;
 
-	if (desired_hdg < 1) desired_hdg += 360;
-
-	while (abs(error) < 1) {
+	while (true) {
 		hdg = inertial.get_heading();
+		if (desired_hdg < 1 && hdg > 180) hdg -= 360;
 
-		error = desired_hdg - hdg;
+		error = desired_hdg - hdg;       // Error
 		total_error += error;            // Integral
 		derivative = error - error_prev; // Derivative
+
+		if (abs(error) < 1) break;
 
 		// Integral failsafe
 		if (error == 0 || abs(error) > 40) total_error = 0;
 
 		// Calculate motor speed and move motors
-		double motor_pwr = (error * 1) + (total_error * 0.5) + (derivative * 0.5);
-		int dir = (hdg > 180) ? -1 : 1;
+		double motor_pwr = (error * 1);
+		int dir = (desired_hdg > 180) ? -1 : 1;
 
 		drive_fl.move_velocity(dir * -motor_pwr);
 		drive_fr.move_velocity(dir * motor_pwr);
