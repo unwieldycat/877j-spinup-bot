@@ -22,8 +22,8 @@ pros::Motor roller(7, pros::E_MOTOR_GEARSET_36, true);
 pros::Motor pusher(8, pros::E_MOTOR_GEARSET_36);
 
 // Sensors
-pros::Rotation rotation_long(11);
-pros::Rotation rotation_lat(12);
+pros::Rotation rotation_long(11, false);
+pros::Rotation rotation_lat(12, true);
 
 // ================================= Chassis ================================= //
 
@@ -39,7 +39,6 @@ void drive_distance(double dist, bool strafe) {
 	// Proxy the rotary encoder
 	pros::Rotation *rotation = (strafe) ? &rotation_lat : &rotation_long;
 	rotation->reset_position();
-	rotation->set_reversed(false);
 
 	inertial.set_heading(0);
 	drive_fl.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);
@@ -116,7 +115,7 @@ void turn(int desired_hdg) {
 		if (error == 0 || abs(error) > 40) total_error = 0;
 
 		// Calculate motor speed and move motors
-		double motor_pwr = (error * 1);
+		double motor_pwr = (error * 2); // TODO: Add I and D
 		int dir = (desired_hdg > 180) ? -1 : 1;
 
 		drive_fl.move_velocity(dir * -motor_pwr);
