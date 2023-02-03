@@ -150,17 +150,9 @@ auton::action_t gui::auton_selection() {
 
 char *get_mode_as_c_str() {
 	if (!pros::competition::is_connected()) return (char *)"not connected";
-
-	switch (pros::competition::get_status()) {
-	case (COMPETITION_DISABLED):
-		return (char *)"disabled";
-
-	case (COMPETITION_AUTONOMOUS):
-		return (char *)"autonomous";
-
-	default:
-		return (char *)"driver control";
-	}
+	if (pros::competition::is_autonomous()) return (char *)"autonomous";
+	if (pros::competition::is_disabled()) return (char *)"disabled";
+	return (char *)"driver control";
 }
 
 lv_res_t abtn_action(lv_obj_t *obj) {
@@ -178,19 +170,19 @@ lv_res_t abtn_action(lv_obj_t *obj) {
 void gui::game() {
 	// Game mode label
 	lv_obj_t *mode_label = lv_label_create(lv_scr_act(), NULL);
-	lv_obj_align(mode_label, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 8, -8);
+	lv_obj_align(mode_label, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -96, -8);
 	lv_label_set_text(mode_label, "");
 
 	// Image
 	lv_obj_t *logo = lv_img_create(lv_scr_act(), NULL);
-	lv_obj_set_size(logo, 128, 128);
-	lv_obj_align(logo, NULL, LV_ALIGN_IN_TOP_RIGHT, -8, 8);
+	lv_obj_set_size(logo, 240, 240);
+	lv_obj_align(logo, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 	lv_img_set_src(logo, "S:/logo.bin");
 
 	// Actions
 	lv_obj_t *actions_list = lv_list_create(lv_scr_act(), NULL);
 	lv_obj_set_size(actions_list, 128, 130);
-	lv_obj_align(actions_list, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -8, -8);
+	lv_obj_align(actions_list, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -8, -32);
 
 	lv_obj_t *auton_sel_btn = lv_list_add(actions_list, NULL, "Auton selection", abtn_action);
 	lv_obj_set_free_num(auton_sel_btn, 0);
