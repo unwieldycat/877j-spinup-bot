@@ -53,7 +53,7 @@ void drive_distance(double dist, bool strafe) {
 	double hdg_error;
 	double pos = 0;
 
-	while (pos < end_pos) {
+	while (true) {
 		hdg = inertial.get_heading();
 
 		// Calculate heading error
@@ -62,7 +62,9 @@ void drive_distance(double dist, bool strafe) {
 		// Rotary encoder position
 		pos = (double)rotation->get_position() / 100 / 360;
 
-		error = pos - end_pos;           // Proportional
+		error = pos - end_pos; // Proportional
+		if (abs(error) < 1) break;
+
 		total_error += error;            // Integral
 		derivative = error - error_prev; // Derivative
 
