@@ -8,27 +8,23 @@ void auton::skills() {
 	// Do roller
 	drive_power(-64, 1000, true);
 	roller.move(-64);
-	pros::delay(200);
+	pros::delay(550);
 	roller.brake();
 
 	// Align with next roller
 	drive_distance(-24 * 2, true);
 	turn(90);
 	drive_distance(24, true);
-	drive_distance(-24);
+	drive_distance(24);
 
 	// Do roller
 	drive_power(-64, 1000, true);
 	roller.move(-64);
-	pros::delay(200);
+	pros::delay(550);
 	roller.brake();
 
-	// Turn to point downfield
-	drive_distance(-12, true);
-	turn(45);
-
 	controller.rumble("-");
-	pros::delay(2000);
+	pros::delay(10000);
 
 	expansion.move(-127);
 	pros::delay(3000);
