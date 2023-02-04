@@ -59,15 +59,11 @@ void do_roller() {
 	drive_power(64, 250, true);
 }
 
-void roller_lg_left() {
-	do_roller();
-	drive_distance(3.5 * 24);
-}
+void roller_left() { do_roller(); }
 
-void roller_lg_right() {
-	drive_distance(-24);
+void roller_right() {
+	drive_distance(24);
 	do_roller();
-	drive_distance(3.5 * 24);
 }
 
 // ============================ Routine Metadata ============================ //
@@ -76,5 +72,5 @@ std::vector<Routine> auton::routines{
     Routine(do_nothing, start_position_e::BOTH, "Do nothing"),
     Routine(lowgoal, start_position_e::BOTH, "Push discs into low goal"),
     Routine(do_roller, start_position_e::BOTH, "Do roller"),
-    Routine(roller_lg_left, start_position_e::RIGHT, "Roller & Lowgoal (Left)"),
-    Routine(roller_lg_right, start_position_e::LEFT, "Roller & Lowgoal (Right)")};
+    Routine(roller_left, start_position_e::RIGHT, "Roller (Left)"),
+    Routine(roller_right, start_position_e::LEFT, "Roller (Right)")};
