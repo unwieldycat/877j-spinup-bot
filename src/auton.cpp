@@ -12,9 +12,9 @@ void auton::skills() {
 	roller.brake();
 
 	// Align with next roller
-	drive_distance(24, true);
-	turn(90);
 	drive_distance(-24, true);
+	turn(90);
+	drive_distance(24, true);
 
 	// Do roller
 	drive_power(-64, 1000, true);
@@ -52,8 +52,7 @@ void lowgoal() {
 	drive_power(-64, 2000);
 }
 
-// FIXME: Roller scores for other team
-void one_roller_left() {
+void do_roller() {
 	drive_power(-64, 1000, true);
 
 	roller.move(-64);
@@ -63,16 +62,15 @@ void one_roller_left() {
 	drive_power(64, 250, true);
 }
 
-void one_roller_right() {
-	drive_distance(24, true);
+void roller_lg_left() {
+	do_roller();
+	drive_distance(3.5 * 24);
+}
 
-	drive_power(-64, 1000, true);
-
-	roller.move(-64);
-	pros::delay(180);
-	roller.brake();
-
-	drive_power(64, 250, true);
+void roller_lg_right() {
+	drive_distance(-24);
+	do_roller();
+	drive_distance(3.5 * 24);
 }
 
 // ============================ Routine Metadata ============================ //
@@ -80,5 +78,6 @@ void one_roller_right() {
 std::vector<Routine> auton::routines{
     Routine(do_nothing, start_position_e::BOTH, "Do nothing"),
     Routine(lowgoal, start_position_e::BOTH, "Push discs into low goal"),
-    Routine(one_roller_right, start_position_e::RIGHT, "Set One Roller (Right)"),
-    Routine(one_roller_left, start_position_e::LEFT, "Set One Roller (Left)")};
+    Routine(do_roller, start_position_e::BOTH, "Do roller"),
+    Routine(roller_lg_left, start_position_e::RIGHT, "Roller & Lowgoal (Left)"),
+    Routine(roller_lg_right, start_position_e::LEFT, "Roller & Lowgoal (Right)")};
