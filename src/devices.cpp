@@ -202,37 +202,37 @@ void drive_control() {
 		}
 
 		// Check against deadzone
-		if (-0.5 < turn > 0.5 || -0.5 < drive > 0.5 || -0.5 < strafe > 0.5) {
+		if (abs(turn) > 0.5 || abs(drive) > 0.5 || abs(strafe) > 0.5) {
 			// Move motors
 			if (dir == 0) { // Drive forward
-				drive_fl.move_velocity((drive + strafe + turn) * 200);
-				drive_fr.move_velocity((drive - strafe - turn) * 200);
-				drive_rl.move_velocity((drive - strafe + turn) * 200);
-				drive_rr.move_velocity((drive + strafe - turn) * 200);
+				drive_fr.move((drive - strafe - turn));
+				drive_rl.move((drive - strafe + turn));
+				drive_fl.move((drive + strafe + turn));
+				drive_rr.move((drive + strafe - turn));
 			} else if (dir == 1) { // Drive right
-				drive_fl.move_velocity((drive - strafe + turn) * 200);
-				drive_fr.move_velocity((drive + strafe + turn) * 200);
-				drive_rl.move_velocity((drive + strafe - turn) * 200);
-				drive_rr.move_velocity((drive - strafe - turn) * 200);
+				drive_fl.move((drive - strafe + turn));
+				drive_fr.move((drive + strafe + turn));
+				drive_rl.move((drive + strafe - turn));
+				drive_rr.move((drive - strafe - turn));
 			} else if (dir == 2) { // Drive backward
-				drive_fl.move_velocity((drive + strafe - turn) * 200);
-				drive_fr.move_velocity((drive - strafe + turn) * 200);
-				drive_rl.move_velocity((drive - strafe - turn) * 200);
-				drive_rr.move_velocity((drive + strafe + turn) * 200);
+				drive_fl.move((drive + strafe - turn));
+				drive_fr.move((drive - strafe + turn));
+				drive_rl.move((drive - strafe - turn));
+				drive_rr.move((drive + strafe + turn));
 			} else if (dir == 3) { // Drive left
-				drive_fl.move_velocity((drive - strafe - turn) * 200);
-				drive_fr.move_velocity((drive + strafe - turn) * 200);
-				drive_rl.move_velocity((drive + strafe + turn) * 200);
-				drive_rr.move_velocity((drive - strafe + turn) * 200);
+				drive_fl.move((drive - strafe - turn));
+				drive_fr.move((drive + strafe - turn));
+				drive_rl.move((drive + strafe + turn));
+				drive_rr.move((drive - strafe + turn));
 			}
 
 			active = true;
 		} else if (active == true) { // If in deadzone check if active
 			// Stop all motors
-			drive_fl.move_velocity(0);
-			drive_fr.move_velocity(0);
-			drive_rl.move_velocity(0);
-			drive_rr.move_velocity(0);
+			drive_fl.move(0);
+			drive_fr.move(0);
+			drive_rl.move(0);
+			drive_rr.move(0);
 
 			active = false;
 		}
@@ -287,8 +287,8 @@ void expand_control() {
 			controller.rumble("-");
 			pros::delay(1500);
 			if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-				expansion.move(127);
-				pros::delay(10000);
+				expansion.move(-127);
+				pros::delay(3000);
 				expansion.move(0);
 			}
 		}
@@ -303,8 +303,7 @@ void manual_push() {
 	while (true) {
 		bool dig_y = controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y);
 		if (dig_y && !debounce) {
-			pusher.move_relative(30, 100);
-			pusher.move_relative(-30, 100);
+			pusher.move_relative(360, 100);
 			debounce = true;
 
 		} else if (!dig_y && debounce) {
