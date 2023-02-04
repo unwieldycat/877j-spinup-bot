@@ -8,33 +8,31 @@ void auton::skills() {
 	// Do roller
 	drive_power(-64, 1000, true);
 	roller.move(-64);
-	pros::delay(500);
+	pros::delay(200);
 	roller.brake();
 
 	// Align with next roller
-	drive_distance(-24, true);
+	drive_distance(-24 * 2, true);
 	turn(90);
 	drive_distance(24, true);
+	drive_distance(-24);
 
 	// Do roller
 	drive_power(-64, 1000, true);
 	roller.move(-64);
-	pros::delay(500);
+	pros::delay(200);
 	roller.brake();
 
-	// Turn to drive downfield
-	drive_distance(6, true);
-	drive_distance(6);
+	// Turn to point downfield
+	drive_distance(-12, true);
 	turn(45);
 
-	// Push discs to position
-	drive_distance(5.196 * 12);
-	turn(-45);
-	drive_distance(24);
-	drive_distance(-24);
-	turn(45);
+	controller.rumble("-");
+	pros::delay(2000);
 
-	drive_distance(2.828 * 12);
+	expansion.move(-127);
+	pros::delay(3000);
+	expansion.brake();
 }
 
 // ============================= Match Routines ============================= //
