@@ -174,10 +174,15 @@ void gui::game() {
 	lv_obj_align(logo, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 	lv_img_set_src(logo, "S:/logo.bin");
 
+	// Actions list label
+	lv_obj_t *actions_label = lv_label_create(lv_scr_act(), NULL);
+	lv_obj_align(actions_label, NULL, LV_ALIGN_IN_TOP_RIGHT, -128, 32);
+	lv_label_set_text(actions_label, "Quick Actions");
+
 	// Actions
 	lv_obj_t *actions_list = lv_list_create(lv_scr_act(), NULL);
 	lv_obj_set_size(actions_list, 128, 130);
-	lv_obj_align(actions_list, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -8, -32);
+	lv_obj_align(actions_list, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -48, -32);
 
 	lv_obj_t *auton_sel_btn = lv_list_add(actions_list, NULL, "Auton selection", abtn_action);
 	lv_obj_set_free_num(auton_sel_btn, 0);
