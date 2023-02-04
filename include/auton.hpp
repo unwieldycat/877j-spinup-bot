@@ -35,7 +35,7 @@ struct Routine {
 /**
  * Do nothing function (default routine)
  */
-auton::action_t do_nothing();
+action_t do_nothing();
 
 /**
  * Vector of Routine struct instances

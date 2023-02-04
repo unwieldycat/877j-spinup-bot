@@ -39,7 +39,7 @@ void auton::skills() {
 
 // ============================= Match Routines ============================= //
 
-void do_nothing() {}
+auton::action_t auton::do_nothing() { return 0; }
 
 /**
  * Only push discs into low goal
