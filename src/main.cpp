@@ -19,6 +19,12 @@ void initialize() {
 	while (inertial.is_calibrating())
 		pros::delay(500);
 	std::cout << "[INFO] Inertial calibrated" << std::endl;
+
+	const bool fw_over_temp = launcher.is_over_temp();
+	if (fw_over_temp) {
+		controller.rumble("...");
+		controller.set_text(0, 0, "Flywheel overheating!");
+	}
 }
 
 void competition_initialize() { auton_routine = gui::auton_selection(); }
