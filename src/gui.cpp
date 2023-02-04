@@ -168,11 +168,6 @@ lv_res_t abtn_action(lv_obj_t *obj) {
 }
 
 void gui::game() {
-	// Game mode label
-	lv_obj_t *mode_label = lv_label_create(lv_scr_act(), NULL);
-	lv_obj_align(mode_label, NULL, LV_ALIGN_IN_BOTTOM_RIGHT, -96, -8);
-	lv_label_set_text(mode_label, "");
-
 	// Image
 	lv_obj_t *logo = lv_img_create(lv_scr_act(), NULL);
 	lv_obj_set_size(logo, 240, 240);
@@ -186,11 +181,6 @@ void gui::game() {
 
 	lv_obj_t *auton_sel_btn = lv_list_add(actions_list, NULL, "Auton selection", abtn_action);
 	lv_obj_set_free_num(auton_sel_btn, 0);
-
-	while (true) {
-		lv_label_set_text(mode_label, get_mode_as_c_str());
-		pros::delay(500);
-	}
 }
 
 // ================================ Methods ================================ //
@@ -209,4 +199,5 @@ void gui::init() {
 	lv_fs_add_drv(&fs_driver);
 
 	if (!pros::usd::is_installed()) std::cout << "[WARN] No SD card installed" << std::endl;
+	game();
 }

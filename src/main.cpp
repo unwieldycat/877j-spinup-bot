@@ -39,7 +39,4 @@ void opcontrol() {
 	pros::Task roller_task(roller_control);
 	pros::Task expansion_task(expand_control);
 	pros::Task indexer_task(manual_push);
-
-	// Gui task
-	pros::Task gui_task(gui::game);
 }
