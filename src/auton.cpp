@@ -39,9 +39,6 @@ void auton::skills() {
 
 // ============================= Match Routines ============================= //
 
-/**
- * For when our alliance partner has an infinitely better routine
- */
 void do_nothing() {}
 
 /**

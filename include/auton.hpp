@@ -33,6 +33,11 @@ struct Routine {
 };
 
 /**
+ * Do nothing function (default routine)
+ */
+auton::action_t do_nothing();
+
+/**
  * Vector of Routine struct instances
  */
 extern std::vector<Routine> routines;
