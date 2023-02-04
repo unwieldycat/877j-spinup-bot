@@ -1,4 +1,5 @@
 #include "main.hpp"
+#include "auton.hpp"
 #include "devices.hpp"
 #include "gui.hpp"
 
