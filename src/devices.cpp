@@ -53,8 +53,6 @@ void drive_distance(double dist, bool strafe) {
 	double hdg_error;
 	double pos = 0;
 
-	rotation->reset_position();
-
 	while (pos < end_pos) {
 		hdg = inertial.get_heading();
 
@@ -250,7 +248,7 @@ void launch_control() {
 		bool btn_a = controller.get_digital(pros::E_CONTROLLER_DIGITAL_A);
 
 		if (btn_a && !active && !debounce) {
-			launcher.move(116);
+			launcher.move(127);
 			active = true;
 			debounce = true;
 		} else if (btn_a && active && !debounce) {
